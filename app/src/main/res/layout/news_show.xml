@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#c0c0c0">
+        <Button
+            android:id="@+id/secondhand_other_back"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.6"
+            android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="News Title"
+            android:textSize="24sp"
+            android:textColor="#000000"/>
+        <Button
+            android:visibility="visible"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/abc_ic_menu_selectall_mtrl_alpha"/>
+        <Button
+            android:visibility="visible"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/abc_ic_menu_share_mtrl_alpha"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:orientation="vertical"
+        android:background="#20c0c0c0">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="3dp">
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/abc_switch_thumb_material"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="10"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:background="@drawable/blood_border">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:background="#808069"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:background="#ffffff"
+                    android:layout_height="match_parent" />
+
+                </LinearLayout>
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/abc_switch_thumb_material"
+                />
+            </LinearLayout>
+
+        </LinearLayout>
+</LinearLayout>
