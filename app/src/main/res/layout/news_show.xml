@@ -42,6 +42,7 @@
         android:layout_weight="10"
         android:orientation="vertical"
         android:background="#20c0c0c0">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -77,6 +78,64 @@
                 android:background="@drawable/abc_switch_thumb_material"
                 />
             </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#f0f0e0"
+            android:orientation="vertical">
+
+
+            <ListView
+                android:id="@+id/chat_msg_listview"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginTop="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:divider="@null"
+                android:dividerHeight="5dp"
+                android:scrollbars="none"
+                android:cacheColorHint="#00000000"/>
+            <LinearLayout
+                android:id="@+id/rl_bottom"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:background="#c1c1c1"
+                android:gravity="center_vertical">
+                <Button
+                    android:id="@+id/btn_send_left"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="send" />
+                <EditText
+
+                    android:id="@+id/et_sendmessage"
+                    android:layout_width="0dp"
+                    android:layout_weight="4"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#d1d1d1"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:textSize="18sp"/>
+                <Button
+                    android:id="@+id/btn_send_right"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:text="send" />
+            </LinearLayout>
+        </LinearLayout>
 
         </LinearLayout>
 </LinearLayout>
