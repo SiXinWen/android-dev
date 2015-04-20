@@ -8,13 +8,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.avos.avoscloud.AVObject;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
+import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVAnalytics;
 /**
  * Created by kakarotto on 3/26/15.
  */
@@ -29,9 +31,11 @@ public class NewsShow extends Activity {
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+        //AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
         setContentView(R.layout.news_show);
         initView();
         initData();
+        //AVAnalytics.trackAppOpened(getIntent());
         mRightSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +48,9 @@ public class NewsShow extends Activity {
                 rightSend();
             }
         });
+        AVObject testObject = new AVObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);

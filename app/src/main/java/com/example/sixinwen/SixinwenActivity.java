@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.AVObject;
 import com.example.sixinwen.fragments.FirstPageHome;
 import com.example.sixinwen.fragments.FirstPageMe;
 import com.example.sixinwen.fragments.FirstPageMessage;
@@ -35,9 +37,14 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sixinwen);
+        AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
+        AVObject testObject = new AVObject("TestObject");
+        testObject.put("testKey", "sixinwen");
+        testObject.saveInBackground();
         initViews();
         mFragmentManager = getFragmentManager();
         setTabSelection(0);
+
     }
 
 
