@@ -23,6 +23,7 @@ import com.avos.avoscloud.AVAnalytics;
 public class NewsShow extends Activity {
     private Button mLeftSend;
     private Button mRightSend;
+    private Button mBack;
     private EditText mEditText;
     private ChatMsgViewAdapter mChatMsgViewAdapter;
     private ListView mListView;
@@ -36,6 +37,12 @@ public class NewsShow extends Activity {
         initView();
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         mRightSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +56,7 @@ public class NewsShow extends Activity {
             }
         });
         AVObject testObject = new AVObject("TestObject");
-        testObject.put("foo", "bar");
+        testObject.put("foo", "hehe");
         testObject.saveInBackground();
     }
     private void initView() {
@@ -57,6 +64,7 @@ public class NewsShow extends Activity {
         mRightSend = (Button)findViewById(R.id.btn_send_right);
         mEditText = (EditText)findViewById(R.id.et_sendmessage);
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
+        mBack = (Button)findViewById((R.id.news_show_back));
     }
     private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
             "姚妈妈还有什么吩咐...",

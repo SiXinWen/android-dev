@@ -10,7 +10,7 @@
         android:gravity="center_vertical"
         android:background="#c0c0c0">
         <Button
-            android:id="@+id/secondhand_other_back"
+            android:id="@+id/news_show_back"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="0.6"
@@ -30,6 +30,7 @@
             android:layout_weight="0.5"
             android:background="@drawable/abc_ic_menu_selectall_mtrl_alpha"/>
         <Button
+            android:id="@+id/news_show_share"
             android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="25dp"
