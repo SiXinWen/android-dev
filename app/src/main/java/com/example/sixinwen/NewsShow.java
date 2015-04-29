@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.avos.avoscloud.AVObject;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
@@ -17,6 +18,9 @@ import java.util.Calendar;
 import java.util.List;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVAnalytics;
+
+import static android.view.View.OnClickListener;
+
 /**
  * Created by kakarotto on 3/26/15.
  */
@@ -29,6 +33,30 @@ public class NewsShow extends Activity {
     private ListView mListView;
     private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
 
+    private TextView mNewsTitle;
+    private String newsDetailString = new String("4月25日尼泊尔里氏8.1级地震发生以后，由于尼泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼泊尔，接回中国游客。有不少人叫好的同时，也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”");
+    private TextView mNewsDetail;
+    //判断是否隐藏新闻详细信息
+    private boolean hideText = true;
+    private OnClickListener mTitleClick = new OnClickListener() {
+        public void onClick (View v) {
+            switch(v.getId()) {
+                case R.id.et_news_title:
+                    if(hideText) {
+                        mNewsDetail.setVisibility(View.VISIBLE);
+                        hideText = false;
+                    } else {
+                        mNewsDetail.setVisibility(View.GONE);
+                        hideText = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
@@ -37,24 +65,27 @@ public class NewsShow extends Activity {
         initView();
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
-        mBack.setOnClickListener(new View.OnClickListener() {
+        mBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        mRightSend.setOnClickListener(new View.OnClickListener() {
+        mRightSend.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 leftSend();
             }
         });
-        mLeftSend.setOnClickListener(new View.OnClickListener() {
+        mLeftSend.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 rightSend();
             }
         });
+
+        mNewsTitle.setOnClickListener(mTitleClick);
+
         AVObject testObject = new AVObject("TestObject");
         testObject.put("foo", "hehe");
         testObject.saveInBackground();
@@ -65,6 +96,10 @@ public class NewsShow extends Activity {
         mEditText = (EditText)findViewById(R.id.et_sendmessage);
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
         mBack = (Button)findViewById((R.id.news_show_back));
+
+        mNewsTitle = (TextView)findViewById(R.id.et_news_title);
+        mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
+
     }
     private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
             "姚妈妈还有什么吩咐...",
@@ -81,6 +116,9 @@ public class NewsShow extends Activity {
             "2012-09-01 18:40", "2012-09-01 18:50"};
     private final static int COUNT = 8;
     private void initData() {
+
+        mNewsDetail.setText(newsDetailString);
+
         for(int i = 0; i < COUNT; i++) {
             ChatMsgEntity entity = new ChatMsgEntity();
             entity.setDate(dataArray[i]);

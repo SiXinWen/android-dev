@@ -16,6 +16,7 @@
             android:layout_weight="0.6"
             android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha"/>
         <TextView
+            android:id="@+id/et_news_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
@@ -37,6 +38,14 @@
             android:layout_weight="0.5"
             android:background="@drawable/share"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/et_news_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
