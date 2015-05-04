@@ -4,7 +4,7 @@
     android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="10dp"
         android:layout_weight="0.8"
         android:orientation="horizontal"
         android:gravity="center_vertical"
@@ -39,12 +39,17 @@
             android:background="@drawable/share"/>
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/et_news_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
+        android:scrollbars="vertical"
+        android:singleLine="false"
+        android:maxLines="15"
         android:visibility="gone"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.example.sixinwen;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -34,7 +35,18 @@ public class NewsShow extends Activity {
     private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
 
     private TextView mNewsTitle;
-    private String newsDetailString = new String("4月25日尼泊尔里氏8.1级地震发生以后，由于尼泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼泊尔，接回中国游客。有不少人叫好的同时，也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”");
+    private String newsDetailString = new String("4月25日尼泊尔里氏8.1级地震发生以后，由于" +
+            "尼泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼" +
+            "泊尔，接回中国游客。有不少人叫好的同时，也出现不同声音，有人发微博：让中国人先走" +
+            "！尼泊尔撤侨又见大国沙文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”" +
+            "4月25日尼泊尔里氏8.1级地震发生以后，由于尼泊尔是一个旅游国家，大量外国游客滞留尼" +
+            "境内。有消息显示，震后中国飞机第一个到尼泊尔，接回中国游客。有不少人叫好的同时，" +
+            "也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙文主义。不少网友跟评，" +
+            "“看见祖国这么‘流氓’，我就放心了！”4月25日尼泊尔里氏8.1级地震发生以后，由于尼" +
+            "泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼泊" +
+            "尔，接回中国游客。有不少人叫好的同时" +
+            "，也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙" +
+            "文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”");
     private TextView mNewsDetail;
     //判断是否隐藏新闻详细信息
     private boolean hideText = true;
@@ -99,6 +111,8 @@ public class NewsShow extends Activity {
 
         mNewsTitle = (TextView)findViewById(R.id.et_news_title);
         mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
+        mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
+
 
     }
     private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
