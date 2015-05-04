@@ -110,8 +110,7 @@
             <LinearLayout
                 android:id="@+id/rl_bottom"
                 android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.2"
+                android:layout_height="wrap_content"
                 android:background="#c1c1c1"
                 android:gravity="center_vertical">
                 <Button
@@ -124,16 +123,16 @@
                     android:layout_centerVertical="true"
                     android:text="send" />
                 <EditText
-
+                    android:inputType="textMultiLine"
+                    android:scrollHorizontally="false"
                     android:id="@+id/et_sendmessage"
                     android:layout_width="0dp"
                     android:layout_weight="4"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="#d1d1d1"
                     android:layout_centerVertical="true"
-                    android:singleLine="true"
                     android:textSize="18sp"/>
                 <Button
                     android:id="@+id/btn_send_right"
