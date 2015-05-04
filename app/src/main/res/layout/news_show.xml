@@ -138,6 +138,7 @@
                     android:layout_marginRight="10dp"
                     android:background="#d1d1d1"
                     android:layout_centerVertical="true"
+                    android:singleLine="false"
                     android:textSize="18sp"/>
                 <Button
                     android:id="@+id/btn_send_right"
