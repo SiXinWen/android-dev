@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000000"
-            android:background="#ff06eb26"/>
+            android:background="#ff4dbcf9"/>
         <TextView
             android:id="@+id/tv_username"
             android:layout_width="wrap_content"
