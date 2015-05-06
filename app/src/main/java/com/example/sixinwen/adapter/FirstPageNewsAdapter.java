@@ -43,7 +43,7 @@ public class FirstPageNewsAdapter extends BaseAdapter{
                 /*得到各个控件的对象*/
             holder.title = (TextView) convertView.findViewById(R.id.first_page_news_item_intro);//reuse, so is the following
             holder.description = (TextView) convertView.findViewById(R.id.first_page_news_item_description);
-            holder.right = (Button) convertView.findViewById(R.id.first_page_news_item_right);
+        //    holder.right = (Button) convertView.findViewById(R.id.first_page_news_item_right);
             holder.agree = (TextView) convertView.findViewById(R.id.first_page_news_item_agree);
             holder.disagree = (TextView) convertView.findViewById(R.id.first_page_news_item_disagree);
             holder.image = (ImageView) convertView.findViewById(R.id.first_page_news_item_pic);
