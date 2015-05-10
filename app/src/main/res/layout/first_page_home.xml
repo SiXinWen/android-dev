@@ -9,7 +9,7 @@
         android:layout_weight="0.8"
         android:orientation="horizontal"
         android:layout_gravity="center_vertical"
-        android:background="#ffffff">
+        android:background="#268dfd">
         <Button
             android:layout_width="0dp"
             android:layout_height="25dp"
@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:textSize="22sp"
-            android:text="Name"
-            android:textColor="#000000"
+            android:text="新闻列表"
+            android:textColor="#ffffff"
             />
         <Button
             android:visibility="invisible"
@@ -37,13 +37,10 @@
             android:layout_weight="0.60"
             android:background="#ffffff"/>
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
     <ListView
         android:id="@+id/first_page_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"></ListView>
+        android:layout_weight="9"
+        android:divider="@null"></ListView>
 </LinearLayout>

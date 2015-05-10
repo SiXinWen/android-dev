@@ -6,15 +6,16 @@
     android:background="#ffffff">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:descendantFocusability="blocksDescendants"
         android:background="#ffffff">
         <ImageView
+            android:layout_gravity="center_vertical"
             android:id="@+id/first_page_news_item_pic"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="100dp"
+            android:layout_height="50dp"
             android:src="@drawable/win10tx"
             android:layout_margin="10dp"/>
 
@@ -22,20 +23,32 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_margin="5dp"
-            android:layout_height="100dp"
+            android:layout_height="70dp"
             android:orientation="vertical">
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1.5">
+                android:layout_weight="1">
                 <TextView
                     android:textColor="#000000"
                     android:id="@+id/first_page_news_item_intro"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
+                    android:singleLine="true"
                     android:gravity="center_vertical"
                     android:text="微软腾讯战略合作 电脑管家可一键升级Win10"/>
-            </RelativeLayout>
+                <TextView
+                    android:gravity="center"
+                    android:layout_margin="2dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/comments_number_bg"
+                    android:text="评论:5k"
+                    android:textSize="12sp"
+                    android:textColor="#000000"/>
+            </LinearLayout>
             <TextView
                 android:textColor="#000000"
                 android:gravity="top"
@@ -43,14 +56,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
-                android:text="详细介绍"/>
+                android:text="详细介绍"
+                android:maxLines="2"
+                android:ellipsize="end"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_height="2dp"
+        android:orientation="horizontal">
 
         <TextView
             android:background="#ff4dbcf9"

@@ -105,8 +105,8 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
             case 0:
                 // 当点击了消息tab时，改变控件的图片和文字颜色
                 //mHomePageImage.setImageResource(R.drawable.home_home);
-                mHomePageText.setTextColor(Color.CYAN);
-                mHomeLayout.setBackgroundColor(Color.GRAY);
+                mHomePageText.setTextColor(Color.parseColor("#268bfd"));
+                //mHomeLayout.setBackgroundColor(Color.GRAY);
                 if (mFirstPageHome == null) {
                     // 如果MessageFragment为空，则创建一个并添加到界面上
                     mFirstPageHome = new FirstPageHome();
@@ -119,8 +119,8 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
             case 1:
                 // 当点击了联系人tab时，改变控件的图片和文字颜色
                 //mMessageImage.setImageResource(R.drawable.home_find);
-                mMessageText.setTextColor(Color.CYAN);
-                mMessageLayout.setBackgroundColor(Color.GRAY);
+                mMessageText.setTextColor(Color.parseColor("#268bfd"));
+                //mMessageLayout.setBackgroundColor(Color.GRAY);
                 if (mFirstPageMesaage == null) {
                     // 如果mFirstPageFind为空，则创建一个并添加到界面上
                     mFirstPageMesaage = new FirstPageMessage();
@@ -135,8 +135,8 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
             default:
                 // 当点击了设置tab时，改变控件的图片和文字颜色
                 //mMeImage.setImageResource(R.drawable.home_pc);
-                mMeText.setTextColor(Color.CYAN);
-                mMeLayout.setBackgroundColor(Color.GRAY);
+                mMeText.setTextColor(Color.parseColor("#268bfd"));
+                //mMeLayout.setBackgroundColor(Color.GRAY);
                 if (mFirstPageMe == null) {
                     // 如果SettingFragment为空，则创建一个并添加到界面上
                     mFirstPageMe = new FirstPageMe();
