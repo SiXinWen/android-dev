@@ -111,12 +111,23 @@
                         android:paddingBottom="16.0dip"
                         android:paddingTop="16.0dip" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10.0dip"
+                            android:src="@drawable/person2"
+                            />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
+                            android:paddingLeft="10.0dip"
                             android:text="修改昵称"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
@@ -150,12 +161,23 @@
                         android:paddingBottom="16.0dip"
                         android:paddingTop="16.0dip" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10.0dip"
+                            android:src="@drawable/password"
+                            />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
+                            android:paddingLeft="10.0dip"
                             android:text="修改密码"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
@@ -205,20 +227,30 @@
                         android:paddingBottom="16.0dip"
                         android:paddingTop="16.0dip" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10.0dip"
+                            android:src="@drawable/star"
+                            />
 
-                            android:drawablePadding="10.0dip"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
+                            android:paddingLeft="10.0dip"
                             android:text="我的收藏"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
                         <ImageView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
@@ -252,7 +284,7 @@
                     android:shrinkColumns="0"
                     android:stretchColumns="0" >
                     <TableRow
-                        android:id="@+id/more_page_row6"
+                        android:id="@+id/more_page_row5"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -260,14 +292,23 @@
                         android:paddingBottom="16.0dip"
                         android:paddingTop="16.0dip" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10.0dip"
+                            android:src="@drawable/pen"
+                            />
 
-                            android:drawablePadding="10.0dip"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
+                            android:paddingLeft="10.0dip"
                             android:text="用户反馈"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
@@ -300,14 +341,23 @@
                         android:paddingBottom="16.0dip"
                         android:paddingTop="16.0dip" >
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="fill_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="10.0dip"
+                            android:src="@drawable/people"
+                            />
 
-                            android:drawablePadding="10.0dip"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="17.0dip"
+                            android:paddingLeft="10.0dip"
                             android:text="关于我们"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
