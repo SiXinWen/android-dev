@@ -63,6 +63,10 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         holder.title.setText(newsItem.getName());
         //holder.agree.setText(newsItem.getAgree());
         //holder.disagree.setText(newsItem.getDisagree());
+        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
+        lp1.weight = (float)newsItem.getAgree();holder.agree.setLayoutParams(lp1);
+        lp2.weight = (float)newsItem.getDisagree();holder.disagree.setLayoutParams(lp2);
 
 
 

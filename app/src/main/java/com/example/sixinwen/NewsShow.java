@@ -99,8 +99,8 @@ public class NewsShow extends Activity {
         mNewsTitle.setOnClickListener(mTitleClick);
 
         AVObject testObject = new AVObject("TestObject");
-        testObject.put("foo", "hehe");
-        testObject.saveInBackground();
+        //testObject.put("foo", "hehe");
+        //testObject.saveInBackground();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);

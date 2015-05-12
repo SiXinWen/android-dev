@@ -17,6 +17,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.example.sixinwen.NewsShow;
 import com.example.sixinwen.R;
@@ -65,7 +66,28 @@ public class FirstPageHome extends Fragment{
         AVObject news = new AVObject("News");
         String title,content;
         newslist = new ArrayList<AVObject>();
-        query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
+        //query.whereEqualTo("playerName", "steve");
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+                    int size = avObjects.size();
+                    for (int i = 1; i < size; i++) {
+                        AVObject obj= avObjects.get(i);
+                        newslist.add(obj);
+                        double support = obj.getDouble("SupportRatio");
+                        NewsItem newsItem = new NewsItem(obj.getString("Title"), obj.getString("Content"), support, 1-support, imageView);
+                        // have to get picture here!
+                        newsItemList.add(newsItem);
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                } else {
+                    Log.d("失败", "查询错误: " + e.getMessage());
+                }
+            }
+        });
+/*        query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
             public void done(AVObject inews, AVException e) {
                 if (e == null) {
                     Log.d("WRH", "Title：" + inews.getString("Title"));
@@ -83,6 +105,7 @@ public class FirstPageHome extends Fragment{
                 }
             }
         });
+ */
         //query.getQuery("TestObject");
 
         try {
