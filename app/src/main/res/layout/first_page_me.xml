@@ -47,7 +47,7 @@
                     android:id="@+id/MorePageTableLayout_Favorite"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffffff"
+                    android:background="@drawable/personal_info_bg"
                     android:shrinkColumns="0"
                     android:stretchColumns="0" >
 
@@ -98,7 +98,7 @@
                     android:id="@+id/MorePageTableLayout_Follow"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="#ffffffff"
+                    android:background="@drawable/personal_info_bg"
                     android:paddingLeft="1.0dip"
                     android:shrinkColumns="0"
                     android:stretchColumns="0" >
@@ -192,7 +192,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="1.0dip"
-                    android:background="#ffffffff"
+                    android:background="@drawable/personal_info_bg"
                     android:shrinkColumns="0"
                     android:stretchColumns="0" >
 
