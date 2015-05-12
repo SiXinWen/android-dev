@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:descendantFocusability="blocksDescendants"
+        android:background="#ffffff">
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/first_page_message_item_pic"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:src="@drawable/person"
+            android:layout_margin="10dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_margin="5dp"
+            android:layout_height="70dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+                <TextView
+                    android:textColor="#000000"
+                    android:id="@+id/first_page_message_item_person_name"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:text="wrh"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
+            <TextView
+                android:textColor="#000000"
+                android:gravity="top"
+                android:id="@+id/first_page_message_item_abstract"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="你的评论真是太亮了！！！"
+                android:maxLines="2"
+                android:ellipsize="end"/>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#b8b8b8"/>
+</LinearLayout>
