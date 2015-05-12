@@ -9,7 +9,7 @@
         android:id="@+id/top_relative"
         android:layout_width="fill_parent"
         android:background="#268dfd"
-        android:layout_height="42.0dip" >
+        android:layout_height="48.0dip" >
 
         <TextView
             android:id="@+id/titleText"
