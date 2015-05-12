@@ -138,7 +138,7 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                            />
+                            android:src="@drawable/tri"/>
 
                     </TableRow>
 
@@ -188,7 +188,7 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                            />
+                            android:src="@drawable/tri"/>
                     </TableRow>
 
                 </TableLayout>
@@ -255,7 +255,8 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                             />
+                            android:src="@drawable/tri"
+                            />
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
@@ -319,7 +320,7 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                            />
+                            android:src="@drawable/tri"/>
                     </TableRow>
                     <TableRow
                         android:id="@+id/more_page_row4_5"
@@ -368,7 +369,7 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                            />
+                            android:src="@drawable/tri"/>
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
