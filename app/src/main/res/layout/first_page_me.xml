@@ -225,20 +225,34 @@
                             android:paddingRight="20.0dip"
                              />
                     </TableRow>
+                </TableLayout>
+            </LinearLayout>
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10.0dip"
+                android:layout_marginTop="10.0dip"
+                android:gravity="center_vertical"
+                android:paddingLeft="4.0dip"
+                android:text=""
+                android:textColor="#ff888888"
+                android:textSize="16.0sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <TableLayout
+                    android:id="@+id/MorePageTableLayout_Cloud"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="1.0dip"
+                    android:background="@drawable/personal_info_bg"
+                    android:shrinkColumns="0"
+                    android:stretchColumns="0" >
                     <TableRow
-                        android:id="@+id/more_page_row4_5"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="2.0dip"
-                        android:layout_marginRight="2.0dip"
-                        android:background="#1d000000"
-                        android:paddingBottom="1.0dip"
-                        android:paddingTop="0.0dip" >
-
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/more_page_row5"
+                        android:id="@+id/more_page_row6"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -254,7 +268,7 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="17.0dip"
-                            android:text="设置"
+                            android:text="用户反馈"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
@@ -264,11 +278,10 @@
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                             />
+                            />
                     </TableRow>
-
                     <TableRow
-                        android:id="@+id/more_page_row5_5"
+                        android:id="@+id/more_page_row4_5"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -295,7 +308,7 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="17.0dip"
-                            android:text="用户反馈"
+                            android:text="关于我们"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
