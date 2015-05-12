@@ -27,7 +27,7 @@
             android:focusable="false"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/win10tx"/>
+            android:background="@drawable/icon"/>
         <TextView
             android:id="@+id/tv_chatcontent"
             android:layout_toRightOf="@id/iv_userhead"
