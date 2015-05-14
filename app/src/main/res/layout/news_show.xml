@@ -13,7 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="0.6"
-            android:background="@drawable/share"/>
+            android:background="@drawable/back"/>
         <LinearLayout
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
