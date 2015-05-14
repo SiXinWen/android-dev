@@ -94,6 +94,7 @@
                     android:layout_weight="10"
                     android:layout_height="match_parent">
                     <TextView
+                        android:id="@+id/news_show_support"
                         android:paddingLeft="6dp"
                         android:layout_width="0dp"
                         android:layout_weight="3"
@@ -103,14 +104,15 @@
                         android:text="超有勇气"
                         android:gravity="center_vertical"/>
                     f<TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:paddingRight="6dp"
-                    android:background="#f75153"
-                    android:layout_height="match_parent"
-                    android:textColor="#ffffff"
-                    android:text="好不现实"
-                    android:gravity="end|center_vertical"/>
+                        android:id="@+id/news_show_oppose"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:paddingRight="6dp"
+                        android:background="#f75153"
+                        android:layout_height="match_parent"
+                        android:textColor="#ffffff"
+                        android:text="好不现实"
+                        android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
                 <Button

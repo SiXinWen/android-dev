@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ import java.util.List;
 import static android.view.View.OnClickListener;
 
 /**
- * Created by kakarotto on 3/26/15.
+ * Created by wangrunhui on 3/26/15.
  */
 public class NewsShow extends Activity {
     private Button mLeftSend;
@@ -41,26 +42,17 @@ public class NewsShow extends Activity {
     private EditText mEditText;
     private ChatMsgViewAdapter mChatMsgViewAdapter;
     private ListView mListView;
-    private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
+    private List<ChatMsgEntity> mDataArrays = new ArrayList<>();
     private AVObject news;
     private int indexOfNews;
     private AVObject obj;
 
     private TextView mShowTitle;
     private TextView mNewsTitle;
-    private String newsDetailString = new String("4月25日尼泊尔里氏8.1级地震发生以后，由于" +
-            "尼泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼" +
-            "泊尔，接回中国游客。有不少人叫好的同时，也出现不同声音，有人发微博：让中国人先走" +
-            "！尼泊尔撤侨又见大国沙文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”" +
-            "4月25日尼泊尔里氏8.1级地震发生以后，由于尼泊尔是一个旅游国家，大量外国游客滞留尼" +
-            "境内。有消息显示，震后中国飞机第一个到尼泊尔，接回中国游客。有不少人叫好的同时，" +
-            "也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙文主义。不少网友跟评，" +
-            "“看见祖国这么‘流氓’，我就放心了！”4月25日尼泊尔里氏8.1级地震发生以后，由于尼" +
-            "泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼泊" +
-            "尔，接回中国游客。有不少人叫好的同时" +
-            "，也出现不同声音，有人发微博：让中国人先走！尼泊尔撤侨又见大国沙" +
-            "文主义。不少网友跟评，“看见祖国这么‘流氓’，我就放心了！”");
+    private String newsDetailString = "";
     private TextView mNewsDetail;
+    private TextView mSupportLine;
+    private TextView mOpposeLine;
     //判断是否隐藏新闻详细信息
     private boolean hideText = true;
     private OnClickListener mTitleClick = new OnClickListener() {
@@ -92,20 +84,27 @@ public class NewsShow extends Activity {
         indexOfNews = bundle.getInt("NewsIndex");Log.d("WRHH", "" + indexOfNews);
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
-        AVQuery<AVObject> query = new AVQuery<AVObject>("News");
+        AVQuery<AVObject> query = new AVQuery<>("News");
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
                     Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
                     obj = avObjects.get(indexOfNews + 1);
                     mNewsTitle.setText(obj.getString("Title"));
+                    double support = obj.getDouble("SupportRatio");
+                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp1.weight = (float)support;
+                    mSupportLine.setLayoutParams(lp1);
+                    lp2.weight = (float)(1-support);
+                    mOpposeLine.setLayoutParams(lp2);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             mNewsDetail.setText(Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
                                 @Override
                                 public Drawable getDrawable(String source) {
-                                    Drawable drawable = null;
+                                    Drawable drawable;
                                     URL url;
                                     try {
                                         url = new URL(source);//Log.d("打开URL成功", ""+url.openStream());
@@ -165,7 +164,8 @@ public class NewsShow extends Activity {
         mNewsTitle = (TextView)findViewById(R.id.news_show_title);
         mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
         mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
-
+        mSupportLine = (TextView) findViewById(R.id.news_show_support);
+        mOpposeLine = (TextView) findViewById(R.id.news_show_oppose);
 
     }
     private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
@@ -249,7 +249,7 @@ public class NewsShow extends Activity {
         String day = String.valueOf(c.get(Calendar.DAY_OF_MONTH) + 1);
         String hour = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
         String mins = String.valueOf(c.get(Calendar.MINUTE));
-        StringBuffer sbBuffer = new StringBuffer();
+        StringBuilder sbBuffer = new StringBuilder();
         sbBuffer.append(year + "-" + month + "-" + day + " " + hour + ":" + mins);
         return sbBuffer.toString();
     }
