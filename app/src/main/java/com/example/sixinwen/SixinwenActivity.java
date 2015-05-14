@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.SaveCallback;
 import com.example.sixinwen.fragments.FirstPageHome;
 import com.example.sixinwen.fragments.FirstPageMe;
 import com.example.sixinwen.fragments.FirstPageMessage;
@@ -44,7 +47,18 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
         initViews();
         mFragmentManager = getFragmentManager();
         setTabSelection(0);
-
+        AVInstallation.getCurrentInstallation().saveInBackground();
+        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            public void done(AVException e) {
+                if (e == null) {
+                    // 保存成功
+                    String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
+                    // 关联  installationId 到用户表等操作……
+                } else {
+                    // 保存失败，输出错误信息
+                }
+            }
+        });
     }
 
 

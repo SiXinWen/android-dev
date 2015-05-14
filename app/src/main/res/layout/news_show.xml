@@ -55,6 +55,7 @@
             android:background="@drawable/share"/>
     </LinearLayout>
     <TextView
+        android:id="@+id/news_show_title"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:background="#ffffff"

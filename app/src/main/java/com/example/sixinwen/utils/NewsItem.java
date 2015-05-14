@@ -10,6 +10,7 @@ public class NewsItem {
     private ImageView image;
     private String name;
     private String description;
+    private int commentNumber;
     private double agree;
     private double disagree;
     private Button right;
@@ -29,17 +30,22 @@ public class NewsItem {
         return disagree;
     }
 
-    public NewsItem(String name, String description, double agree, double disagree, ImageView image) {
+    public NewsItem(String name, String description, double agree, double disagree, ImageView image, int n) {
         this.image = image;
         this.name = name;
         this.description = description;
         this.agree = agree;
         this.disagree = disagree;
+        this.commentNumber = n;
     }
     public NewsItem(NewsItem newsItem){
         this.image = newsItem.getImage();
         this.disagree = newsItem.getDisagree();
         this.agree = newsItem.getAgree();
         this.description = newsItem.getDescription();
+    }
+
+    public int getCommentNumber() {
+        return commentNumber;
     }
 }

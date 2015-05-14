@@ -3,6 +3,7 @@ package com.example.sixinwen;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -10,15 +11,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.FindCallback;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
+import com.example.sixinwen.utils.NewsItem;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import com.avos.avoscloud.AVOSCloud;
-import com.avos.avoscloud.AVAnalytics;
 
 import static android.view.View.OnClickListener;
 
@@ -33,7 +38,10 @@ public class NewsShow extends Activity {
     private ChatMsgViewAdapter mChatMsgViewAdapter;
     private ListView mListView;
     private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
+    private AVObject news;
+    private int indexOfNews;
 
+    private TextView mShowTitle;
     private TextView mNewsTitle;
     private String newsDetailString = new String("4月25日尼泊尔里氏8.1级地震发生以后，由于" +
             "尼泊尔是一个旅游国家，大量外国游客滞留尼境内。有消息显示，震后中国飞机第一个到尼" +
@@ -75,8 +83,23 @@ public class NewsShow extends Activity {
         //AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
         setContentView(R.layout.news_show);
         initView();
+        Bundle bundle = getIntent().getExtras();
+        indexOfNews = bundle.getInt("News");//Log.d("WRHH", "" + avosString);
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
+        AVQuery<AVObject> query = new AVQuery<AVObject>("News");
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+                    AVObject obj = avObjects.get(indexOfNews + 1);
+                    mNewsTitle.setText(obj.getString("Title"));
+                    mNewsDetail.setText(obj.getString("htmlContent"));
+                } else {
+                    Log.d("失败", "查询错误: " + e.getMessage());
+                }
+            }
+        });
         mBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +119,7 @@ public class NewsShow extends Activity {
             }
         });
 
-        mNewsTitle.setOnClickListener(mTitleClick);
+        mShowTitle.setOnClickListener(mTitleClick);
 
         AVObject testObject = new AVObject("TestObject");
         //testObject.put("foo", "hehe");
@@ -109,7 +132,8 @@ public class NewsShow extends Activity {
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
         mBack = (Button)findViewById((R.id.news_show_back));
 
-        mNewsTitle = (TextView)findViewById(R.id.et_news_title);
+        mShowTitle = (TextView)findViewById(R.id.et_news_title);
+        mNewsTitle = (TextView)findViewById(R.id.news_show_title);
         mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
         mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
 

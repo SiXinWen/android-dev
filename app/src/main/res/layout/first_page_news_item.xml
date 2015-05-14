@@ -39,6 +39,7 @@
                     android:gravity="center_vertical"
                     android:text="微软腾讯战略合作 电脑管家可一键升级Win10"/>
                 <TextView
+                    android:id="@+id/first_page_news_item_comment_number"
                     android:gravity="center"
                     android:layout_margin="2dp"
                     android:layout_width="0dp"

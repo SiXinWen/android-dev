@@ -14,11 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
+import com.avos.avoscloud.GetDataCallback;
 import com.example.sixinwen.NewsShow;
 import com.example.sixinwen.R;
 import com.example.sixinwen.adapter.FirstPageNewsAdapter;
@@ -35,6 +37,7 @@ public class FirstPageHome extends Fragment{
     private FirstPageNewsAdapter mAdapter;
     private List<NewsItem> newsItemList;
     private List<AVObject> newslist;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,6 +55,10 @@ public class FirstPageHome extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),NewsShow.class);
+                Bundle bundle = new Bundle();
+                Log.d("WRH", "bundle put " + newslist.get(position));
+                bundle.putInt("NewsIndex", position);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -75,8 +82,12 @@ public class FirstPageHome extends Fragment{
                     for (int i = 1; i < size; i++) {
                         AVObject obj= avObjects.get(i);
                         newslist.add(obj);
+                        //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
                         double support = obj.getDouble("SupportRatio");
-                        NewsItem newsItem = new NewsItem(obj.getString("Title"), obj.getString("Content"), support, 1-support, imageView);
+                        AVFile avFile = obj.getAVFile("Picture");
+                        avFile.getDataInBackground(datacallback);
+
+                        NewsItem newsItem = new NewsItem(obj.getString("Title"), obj.getString("Content"), support, 1-support, imageView,obj.getInt("CommentNum"));
                         // have to get picture here!
                         newsItemList.add(newsItem);
                     }
@@ -108,7 +119,7 @@ public class FirstPageHome extends Fragment{
  */
         //query.getQuery("TestObject");
 
-        try {
+ /*       try {
             news = query.get("552e8498e4b036ba524410ea");
             //Log.d("WRH","hehe"+query.get("552e8498e4b036ba524410ea"));
             Log.d("WRH","hehehehe");
@@ -119,9 +130,9 @@ public class FirstPageHome extends Fragment{
         } catch (AVException e) {
             e.getMessage();Log.d("WRH","hehehehe"+e.getMessage());
         }
-        //System.out.println("query="+query);
-        Log.d("WRH", "news=" + news);
-        NewsItem newsItem = new NewsItem(news.getString("Title"),news.getString("Content"),4,3,imageView);
+ */       //System.out.println("query="+query);
+        //Log.d("WRH", "news=" + news);
+        //NewsItem newsItem = new NewsItem(news.getString("Title"),news.getString("Content"),4,3,imageView,10000);
         //NewsItem newsItem = new NewsItem("testKey","testKey",4,3,imageView);
         //newsItemList.add(newsItem);
         //newsItemList.add(newsItem);
@@ -130,6 +141,11 @@ public class FirstPageHome extends Fragment{
         //newsItemList.add(newsItem);
         mListView.setAdapter(mAdapter);
     }
+    GetDataCallback datacallback = new GetDataCallback() {
+        @Override
+        public void done(byte[] bytes, AVException e) {
 
+        }
+    };
 
 }

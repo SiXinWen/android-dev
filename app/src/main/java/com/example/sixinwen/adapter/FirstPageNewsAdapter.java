@@ -46,6 +46,7 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         //    holder.right = (Button) convertView.findViewById(R.id.first_page_news_item_right);
             holder.agree = (TextView) convertView.findViewById(R.id.first_page_news_item_agree);
             holder.disagree = (TextView) convertView.findViewById(R.id.first_page_news_item_disagree);
+            holder.commentNumber = (TextView) convertView.findViewById(R.id.first_page_news_item_comment_number);
             holder.image = (ImageView) convertView.findViewById(R.id.first_page_news_item_pic);
             convertView.setTag(holder); //绑定ViewHolder对象
         }
@@ -61,6 +62,7 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         holder.image.setImageDrawable(newsItem.getImage().getDrawable());
         holder.description.setText(newsItem.getDescription());
         holder.title.setText(newsItem.getName());
+        holder.commentNumber.setText("评论:"+newsItem.getCommentNumber());
         //holder.agree.setText(newsItem.getAgree());
         //holder.disagree.setText(newsItem.getDisagree());
         LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
@@ -90,6 +92,7 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         public ImageView image;
         public TextView agree;
         public TextView disagree;
+        public TextView commentNumber;
         public Button right;
     }
 }
