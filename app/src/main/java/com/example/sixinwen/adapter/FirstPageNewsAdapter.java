@@ -62,7 +62,12 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         holder.image.setImageDrawable(newsItem.getImage().getDrawable());
         holder.description.setText(newsItem.getDescription());
         holder.title.setText(newsItem.getName());
-        holder.commentNumber.setText("评论:"+newsItem.getCommentNumber());
+        int n = newsItem.getCommentNumber();
+        if (n > 10000) {
+            holder.commentNumber.setText("评论:"+n/1000+"k");
+        } else {
+            holder.commentNumber.setText("评论:"+newsItem.getCommentNumber());
+        }
         //holder.agree.setText(newsItem.getAgree());
         //holder.disagree.setText(newsItem.getDisagree());
         LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);

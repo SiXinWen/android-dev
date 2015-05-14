@@ -54,24 +54,82 @@
             android:layout_weight="0.5"
             android:background="@drawable/share"/>
     </LinearLayout>
-    <TextView
-        android:id="@+id/news_show_title"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="#ffffff"
-        android:text="女教师辞职信走红"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="18sp"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/et_news_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:scrollbars="vertical"
-        android:singleLine="false"
-        android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/news_show_title"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="#ffffff"
+                android:text="女教师辞职信走红"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/et_news_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:scrollbars="vertical"
+                android:singleLine="false"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0"
+                    android:layout_height="match_parent"
+                    />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="10"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:paddingLeft="6dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="match_parent"
+                        android:background="#5aa5f8"
+                        android:textColor="#ffffff"
+                        android:text="超有勇气"
+                        android:gravity="center_vertical"/>
+                    f<TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:paddingRight="6dp"
+                    android:background="#f75153"
+                    android:layout_height="match_parent"
+                    android:textColor="#ffffff"
+                    android:text="好不现实"
+                    android:gravity="end|center_vertical"/>
+
+                </LinearLayout>
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_weight="0"
+                    android:layout_height="match_parent"
+                    />
+            </LinearLayout>
+            <TextView
+
+                android:id="@+id/et_news_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="show news"
+                android:textSize="12sp"
+                android:textColor="#000000"/>
+        </LinearLayout>
+    </ScrollView>
 
 
     <LinearLayout
@@ -81,53 +139,7 @@
         android:orientation="vertical"
         android:background="#20c0c0c0">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="20dp">
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="0"
-                android:layout_height="match_parent"
-                />
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="10"
-                android:layout_height="match_parent">
-                <TextView
-                    android:paddingLeft="6dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="match_parent"
-                    android:background="#5aa5f8"
-                    android:textColor="#ffffff"
-                    android:text="超有勇气"
-                    android:gravity="center_vertical"/>
-                f<TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="5"
-                    android:paddingRight="6dp"
-                    android:background="#f75153"
-                    android:layout_height="match_parent"
-                    android:textColor="#ffffff"
-                    android:text="好不现实"
-                android:gravity="end|center_vertical"/>
 
-                </LinearLayout>
-            <Button
-                android:layout_width="0dp"
-                android:layout_weight="0"
-                android:layout_height="match_parent"
-                />
-            </LinearLayout>
-        <TextView
-
-            android:id="@+id/et_news_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="show news"
-            android:textSize="12sp"
-            android:textColor="#000000"/>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
