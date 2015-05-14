@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +41,8 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sixinwen);
-        AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
+        AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh",
+                "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
         AVObject testObject = new AVObject("TestObject");
         //testObject.put("testKey", "sixinwen");
         //testObject.saveInBackground();
@@ -56,6 +58,7 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
                     // 关联  installationId 到用户表等操作……
                 } else {
                     // 保存失败，输出错误信息
+                    Log.d("保存失败：",e.getMessage());
                 }
             }
         });

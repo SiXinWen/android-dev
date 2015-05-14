@@ -2,7 +2,11 @@ package com.example.sixinwen.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,29 +30,34 @@ import com.example.sixinwen.R;
 import com.example.sixinwen.adapter.FirstPageNewsAdapter;
 import com.example.sixinwen.utils.NewsItem;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by kakarotto on 3/18/15.
+ *
+ * Created by wangrunhui on 3/18/15.
  */
 public class FirstPageHome extends Fragment{
     private ListView mListView;
     private FirstPageNewsAdapter mAdapter;
     private List<NewsItem> newsItemList;
     private List<AVObject> newslist;
+    private Runnable updateNewsRunnable;
+    private Handler mHandler;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View newsLayout = inflater.inflate(R.layout.first_page_home, container,
+        return inflater.inflate(R.layout.first_page_home, container,
                 false);
-        return newsLayout;
     }
     @Override
     public void onStart() {
         super.onStart();
-        AVOSCloud.initialize(getActivity(), "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
+        AVOSCloud.initialize(getActivity(), "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh",
+                "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
 
         init();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,14 +74,25 @@ public class FirstPageHome extends Fragment{
     }
     void init() {
         mListView = (ListView)getActivity().findViewById(R.id.first_page_listview);
-        newsItemList = new ArrayList<NewsItem>();
+        newsItemList = new ArrayList<>();
         final ImageView imageView = new ImageView(getActivity());
         imageView.setImageResource(R.drawable.win10tx);
         mAdapter = new FirstPageNewsAdapter(getActivity(), newsItemList);
-        AVQuery<AVObject> query = new AVQuery<AVObject>("News");
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                }
+                super.handleMessage(msg);
+            }
+        };
+        AVQuery<AVObject> query = new AVQuery<>("News");
         AVObject news = new AVObject("News");
         String title,content;
-        newslist = new ArrayList<AVObject>();
+        newslist = new ArrayList<>();
         //query.whereEqualTo("playerName", "steve");
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
@@ -80,24 +100,55 @@ public class FirstPageHome extends Fragment{
                     Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
                     int size = avObjects.size();
                     for (int i = 1; i < size; i++) {
-                        AVObject obj= avObjects.get(i);
+                        AVObject obj = avObjects.get(i);
                         newslist.add(obj);
-                        //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
-                        double support = obj.getDouble("SupportRatio");
-                        AVFile avFile = obj.getAVFile("Picture");
-                        avFile.getDataInBackground(datacallback);
-
-                        NewsItem newsItem = new NewsItem(obj.getString("Title"), obj.getString("Content"), support, 1-support, imageView,obj.getInt("CommentNum"));
-                        // have to get picture here!
-                        newsItemList.add(newsItem);
                     }
-                    mAdapter.notifyDataSetChanged();
-
+                    new Thread(updateNewsRunnable).start();
                 } else {
                     Log.d("失败", "查询错误: " + e.getMessage());
                 }
             }
         });
+        mListView.setAdapter(mAdapter);
+        updateNewsRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int size = newslist.size();
+
+                for (int i = 0; i < size; i++) {
+                    AVObject obj= newslist.get(i);
+                    //newslist.add(obj);
+                    //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
+                    double support = obj.getDouble("SupportRatio");
+                    //AVObject avFile = obj.getAVObject("Picture");
+                    //avFile.getDataInBackground(datacallback);
+                    Drawable drawable = null;
+                    try {
+                        String source = obj.getAVFile("Picture").getUrl();
+                        URL url = new URL(source);
+                        InputStream is = url.openStream();Log.d("打开URL成功", "");
+                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
+                    } catch (Exception e) {
+                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
+                    }
+
+                    ImageView iw =  new ImageView(getActivity());
+                    iw.setImageDrawable(drawable);
+                    NewsItem newsItem = new NewsItem(obj.getString("Title"),
+                            obj.getString("Content"),
+                            support,
+                            1-support,
+                            iw,
+                            obj.getInt("CommentNum"));
+                    // have to get picture here!
+                    newsItemList.add(newsItem);
+                }
+                //mAdapter.notifyDataSetChanged();
+                Message msg = new Message();
+                msg.what = 1;
+                mHandler.sendMessage(msg);
+            }
+        };
 /*        query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
             public void done(AVObject inews, AVException e) {
                 if (e == null) {
@@ -139,13 +190,7 @@ public class FirstPageHome extends Fragment{
         //newsItemList.add(newsItem);
         //newsItemList.add(newsItem);
         //newsItemList.add(newsItem);
-        mListView.setAdapter(mAdapter);
-    }
-    GetDataCallback datacallback = new GetDataCallback() {
-        @Override
-        public void done(byte[] bytes, AVException e) {
 
-        }
-    };
+    }
 
 }
