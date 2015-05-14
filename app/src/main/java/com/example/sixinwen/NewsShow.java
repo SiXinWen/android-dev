@@ -1,7 +1,9 @@
 package com.example.sixinwen;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +23,8 @@ import com.example.sixinwen.utils.NewsItem;
 
 import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -40,6 +44,7 @@ public class NewsShow extends Activity {
     private List<ChatMsgEntity> mDataArrays = new ArrayList<ChatMsgEntity>();
     private AVObject news;
     private int indexOfNews;
+    private AVObject obj;
 
     private TextView mShowTitle;
     private TextView mNewsTitle;
@@ -84,7 +89,7 @@ public class NewsShow extends Activity {
         setContentView(R.layout.news_show);
         initView();
         Bundle bundle = getIntent().getExtras();
-        indexOfNews = bundle.getInt("News");//Log.d("WRHH", "" + avosString);
+        indexOfNews = bundle.getInt("NewsIndex");Log.d("WRHH", "" + indexOfNews);
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
         AVQuery<AVObject> query = new AVQuery<AVObject>("News");
@@ -92,9 +97,33 @@ public class NewsShow extends Activity {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
                     Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
-                    AVObject obj = avObjects.get(indexOfNews + 1);
+                    obj = avObjects.get(indexOfNews + 1);
                     mNewsTitle.setText(obj.getString("Title"));
-                    mNewsDetail.setText(obj.getString("htmlContent"));
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mNewsDetail.setText(Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
+                                @Override
+                                public Drawable getDrawable(String source) {
+                                    Drawable drawable = null;
+                                    URL url;
+                                    try {
+                                        url = new URL(source);//Log.d("打开URL成功", ""+url.openStream());
+                                        InputStream is = url.openStream();
+                                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
+                                    } catch (Exception e) {
+                                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
+                                        return null;
+                                    }
+                                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
+                                            .getIntrinsicHeight());
+
+                                    return drawable;
+                                }
+                            }, null));
+                        }
+                    }).start();
+
                 } else {
                     Log.d("失败", "查询错误: " + e.getMessage());
                 }
