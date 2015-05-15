@@ -2,8 +2,10 @@ package com.example.sixinwen;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -98,7 +100,7 @@ public class NewsShow extends Activity {
                     mSupportLine.setLayoutParams(lp1);
                     lp2.weight = (float)(1-support);
                     mOpposeLine.setLayoutParams(lp2);
-                    new Thread(new Runnable() {
+ /*                   new Thread(new Runnable() {
                         @Override
                         public void run() {
                             mNewsDetail.setText(Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
@@ -122,6 +124,7 @@ public class NewsShow extends Activity {
                             }, null));
                         }
                     }).start();
+ */                 new myAsyncTask().execute();
 
                 } else {
                     Log.d("失败", "查询错误: " + e.getMessage());
@@ -257,5 +260,48 @@ public class NewsShow extends Activity {
         finish();
         return true;
     }
+
+    private class myAsyncTask extends  AsyncTask<String,String,Spanned> {
+
+        @Override
+        protected Spanned doInBackground(String... params) {
+            Log.d("WRH","in doInBackground");
+            Spanned spanned = Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
+                @Override
+                public Drawable getDrawable(String source) {
+                    Drawable drawable;
+                    URL url;
+                    try {
+                        url = new URL(source);
+                        Log.d("打开URL成功", ""+url);
+                        InputStream is = url.openStream();
+                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
+                    } catch (Exception e) {
+                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
+                        return null;
+                    }
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
+                            .getIntrinsicHeight());
+
+                    return drawable;
+                }
+            }, null);
+            //Log.d("WRH","in doInBackground after html, spanned = "+spanned);
+            return spanned;
+        }
+
+
+
+
+        @Override
+        protected void onPostExecute(Spanned result)
+    {
+        //Log.d("WRH","in onPostExecute, result = "+result);
+        //更新UI的操作，这里面的内容是在UI线程里面执行的
+        mNewsDetail.setText(result);
+    }
+
+}
+
 
 }

@@ -63,8 +63,11 @@ public class FirstPageNewsAdapter extends BaseAdapter{
         holder.description.setText(newsItem.getDescription());
         holder.title.setText(newsItem.getName());
         int n = newsItem.getCommentNumber();
-        if (n > 10000) {
-            holder.commentNumber.setText("评论:"+n/1000+"k");
+        if (n > 1000000) {
+            holder.commentNumber.setText("评论:"+n/1000000+"M");
+        }
+        else if (n > 10000) {
+            holder.commentNumber.setText("评论:"+n/1000+"K");
         } else {
             holder.commentNumber.setText("评论:"+newsItem.getCommentNumber());
         }
