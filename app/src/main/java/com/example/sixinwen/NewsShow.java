@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class NewsShow extends Activity {
     private int indexOfNews;
     private AVObject obj;
 
-    private TextView mShowTitle;
+    private ImageView mShowTitle;
     private TextView mNewsTitle;
     private String newsDetailString = "";
     private TextView mNewsDetail;
@@ -163,7 +164,7 @@ public class NewsShow extends Activity {
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
         mBack = (Button)findViewById((R.id.news_show_back));
 
-        mShowTitle = (TextView)findViewById(R.id.et_news_title);
+        mShowTitle = (ImageView)findViewById(R.id.et_news_title);
         mNewsTitle = (TextView)findViewById(R.id.news_show_title);
         mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
         mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
