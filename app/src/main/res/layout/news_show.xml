@@ -121,15 +121,13 @@
                     android:layout_height="match_parent"
                     />
             </LinearLayout>
-            <TextView
-
+            <ImageView
                 android:id="@+id/et_news_title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="10dp"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="show news"
-                android:textSize="12sp"
-                android:textColor="#000000"/>
+                android:background="#ffffffff"
+                android:src="@drawable/down"/>
         </LinearLayout>
     </ScrollView>
 
