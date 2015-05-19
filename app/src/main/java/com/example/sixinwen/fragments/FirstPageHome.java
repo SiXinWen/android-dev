@@ -56,8 +56,6 @@ public class FirstPageHome extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-        AVOSCloud.initialize(getActivity(), "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh",
-                "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
 
         init();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,6 +82,8 @@ public class FirstPageHome extends Fragment{
                 switch (msg.what) {
                     case 1:
                         mAdapter.notifyDataSetChanged();
+                        break;
+                    default:
                         break;
                 }
                 super.handleMessage(msg);
@@ -140,7 +140,6 @@ public class FirstPageHome extends Fragment{
                             1-support,
                             iw,
                             obj.getInt("CommentNum"));
-                    // have to get picture here!
                     newsItemList.add(newsItem);
                 }
                 //mAdapter.notifyDataSetChanged();
@@ -149,7 +148,8 @@ public class FirstPageHome extends Fragment{
                 mHandler.sendMessage(msg);
             }
         };
-/*        query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
+/*      //获得单个新闻的用法如下
+        query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
             public void done(AVObject inews, AVException e) {
                 if (e == null) {
                     Log.d("WRH", "Title：" + inews.getString("Title"));
@@ -181,15 +181,7 @@ public class FirstPageHome extends Fragment{
         } catch (AVException e) {
             e.getMessage();Log.d("WRH","hehehehe"+e.getMessage());
         }
- */       //System.out.println("query="+query);
-        //Log.d("WRH", "news=" + news);
-        //NewsItem newsItem = new NewsItem(news.getString("Title"),news.getString("Content"),4,3,imageView,10000);
-        //NewsItem newsItem = new NewsItem("testKey","testKey",4,3,imageView);
-        //newsItemList.add(newsItem);
-        //newsItemList.add(newsItem);
-        //newsItemList.add(newsItem);
-        //newsItemList.add(newsItem);
-        //newsItemList.add(newsItem);
+ */
 
     }
 

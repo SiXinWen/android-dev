@@ -1,6 +1,7 @@
 package com.example.sixinwen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.im.v2.AVIMClient;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
 import com.example.sixinwen.utils.NewsItem;
@@ -156,6 +158,7 @@ public class NewsShow extends Activity {
         AVObject testObject = new AVObject("TestObject");
         //testObject.put("foo", "hehe");
         //testObject.saveInBackground();
+        initConversation();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
@@ -226,8 +229,7 @@ public class NewsShow extends Activity {
             mListView.setSelection(mDataArrays.size()-1);
         }
     }
-    private void rightSend()
-    {
+    private void rightSend() {
         String contString = mEditText.getText().toString();
         if (contString.length() > 0)
         {
@@ -291,18 +293,31 @@ public class NewsShow extends Activity {
             return spanned;
         }
 
-
-
-
         @Override
         protected void onPostExecute(Spanned result)
-    {
-        //Log.d("WRH","in onPostExecute, result = "+result);
-        //更新UI的操作，这里面的内容是在UI线程里面执行的
-        mNewsDetail.setText(result);
+        {
+            //Log.d("WRH","in onPostExecute, result = "+result);
+            //更新UI的操作，这里面的内容是在UI线程里面执行的
+            mNewsDetail.setText(result);
+        }
     }
 
-}
-
+    private void initConversation() {
+        AVIMClient imClient = AVIMClient.getInstance("Tom");
+        imClient.open(new IMClientCallback(){
+            @Override
+            public void done(AVIMClient client, AVException e) {
+                if (null != e) {
+                    // 出错了，可能是网络问题无法连接 LeanCloud 云端，请检查网络之后重试。
+                    // 此时聊天服务不可用。
+                    e.printStackTrace();
+                } else {
+                    // 成功登录，可以开始进行聊天了（假设为 MainActivity）。
+                    //Intent intent = new Intent(currentActivity, MainActivity.class);
+                    //currentActivity.startActivity(intent);
+                };
+            }
+        });
+    }
 
 }
