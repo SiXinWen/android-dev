@@ -90,6 +90,7 @@
                     android:layout_height="match_parent"
                     />
                 <LinearLayout
+                    android:id="@+id/bloodbar"
                     android:layout_width="0dp"
                     android:layout_weight="10"
                     android:layout_height="match_parent">
@@ -103,7 +104,7 @@
                         android:textColor="#ffffff"
                         android:text="超有勇气"
                         android:gravity="center_vertical"/>
-                    f<TextView
+                    <TextView
                         android:id="@+id/news_show_oppose"
                         android:layout_width="0dp"
                         android:layout_weight="5"
