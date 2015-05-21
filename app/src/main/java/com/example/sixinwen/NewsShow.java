@@ -127,8 +127,10 @@ public class NewsShow extends Activity {
                     LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
                     lp1.weight = (float)support;
                     mSupportLine.setLayoutParams(lp1);
+                    mSupportLine.setText(obj.getString("AffirmativeView"));
                     lp2.weight = (float)(1-support);
                     mOpposeLine.setLayoutParams(lp2);
+                    mOpposeLine.setText("OpposeView");
  /*                   new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -201,20 +203,143 @@ public class NewsShow extends Activity {
         mOpposeLine = (TextView) findViewById(R.id.news_show_oppose);
 
     }
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
+        mImClient.close(avimClientCallback);
+        finish();
+        return true;
+    }
+
+    private class myAsyncTask extends  AsyncTask<String,String,Spanned> {
+
+        @Override
+        protected Spanned doInBackground(String... params) {
+            Log.d("AsyncTask","in doInBackground");
+            Spanned spanned = Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
+                @Override
+                public Drawable getDrawable(String source) {
+                    Drawable drawable;
+                    URL url;
+                    try {
+                        url = new URL(source);
+                        //Log.d("打开URL成功", ""+url);
+                        InputStream is = url.openStream();
+                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
+                    } catch (Exception e) {
+                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
+                        return null;
+                    }
+                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
+                            .getIntrinsicHeight());
+
+                    return drawable;
+                }
+            }, null);
+            //Log.d("WRH","in doInBackground after html, spanned = "+spanned);
+            return spanned;
+        }
+
+        @Override
+        protected void onPostExecute(Spanned result)
+        {
+            //Log.d("WRH","in onPostExecute, result = "+result);
+            //更新UI的操作，这里面的内容是在UI线程里面执行的
+            mNewsDetail.setText(result);
+        }
+    }
+
+
+    private void loginChat() {
+        Log.d("iniChat", "begin");
+        mImClient = AVIMClient.getInstance("wangrunhui");
+        mImClient.open(new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient client, AVException e) {
+                if (null != e) {
+                    // 出错了，可能是网络问题无法连接 LeanCloud 云端，请检查网络之后重试。
+                    // 此时聊天服务不可用。
+                    e.printStackTrace();
+                } else {
+                    // 成功登录，可以开始进行聊天了（假设为 MainActivity）。
+                    //Intent intent = new Intent(currentActivity, MainActivity.class);
+                    //currentActivity.startActivity(intent);
+                    Log.d("iniChat", "ok");
+                    joinGroupChat();
+                }
+            }
+        });
+        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
+    }
+    class CustomMessageHandler extends AVIMMessageHandler {
+        @Override
+        public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client) {
+            // 新消息到来了。在这里增加你自己的处理代码。
+            String msgContent = message.getContent();
+            Log.d("onMessage",conversation.getConversationId() + " 收到一条新消息：" + msgContent);
+        }
+    }
+    private void joinGroupChat() {
+        //final ChatManager chatManager = ChatManager.getInstance();
+
+
+        //mAvimConversation = new AVIMConversation(mImClient,"5545ca24e4b03ccbae7046a6");
+        AVObject avObject = obj.getAVObject("conv");
+        String newsConvId = avObject.getObjectId();
+        AVIMConversationQuery conversationQuery = mImClient.getQuery();
+//        AVIMConversation conversation = mImClient.getConversation(newsConvId);
+//        Log.d("JoinGroupChat", conversation + "");
+        //conversationQuery.containsMembers(clients);
+
+        // 之前有常量定义：
+        // const int ConversationType_OneOne = 0;
+        // const int ConversationType_Group = 1;
+        //conversationQuery.whereEqualTo("attr.type", ConversationType_Group);
+        conversationQuery.whereEqualTo("objectId",newsConvId);
+        conversationQuery.findInBackground(new AVIMConversationQueryCallback(){
+            @Override
+            public void done(List<AVIMConversation> conversations, AVException e) {
+                Log.d("find done","");
+                if (null != e) {
+                    // 出错了。。。
+                    e.printStackTrace();
+                } else {
+                    if (null != conversations) {
+                        AVObject avObject1 = obj.getAVObject("conv");
+                        String newsConvId = avObject1.getObjectId();
+                        //Log.d("after find Convs", "  newConvID=" + newsConvId + "conv:"+avObject1);int size = conversations.size();
+                        AVIMConversation avimConversation = conversations.get(0);
+                        String convId = avimConversation.getConversationId();
+                        Log.d("after find Convs", "convID=" + convId + "  newConvID=" + newsConvId);
+                        if (convId.equals(newsConvId)) {
+                            //find the conversation
+                            Log.d("search room", "find it");
+                            mAvimConversation = avimConversation;
+                            mAvimConversation.join(new AVIMConversationCallback() {
+                                    @Override
+                                    public void done(AVException e) {Log.d("join", "done!");
+                                    }
+                                });
+                        }
+
+                        Log.d("find conversation", "找到了符合条件的 " + conversations.size() + " 个对话");
+                    } else {
+                        Log.d("fail to find conversati","没有找到符合条件的对话");
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
     private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
-            "姚妈妈还有什么吩咐...",
-            "还有，明天早上记得跑操啊，不来的就扣德育分！",
-            "德育分是什么？扣了会怎么样？",
-            "德育分会影响奖学金评比，严重的话，会影响毕业",
-            "哇！学院那么不人道？",
-            "你要是你不听话，我当场让你不能毕业！",
-            "姚妈妈，我知错了(- -我错在哪了...)"};
+            "姚妈妈还有什么吩咐..."};
 
     private String[]dataArray = new String[]{"2012-09-01 18:00", "2012-09-01 18:10",
             "2012-09-01 18:11", "2012-09-01 18:20",
             "2012-09-01 18:30", "2012-09-01 18:35",
             "2012-09-01 18:40", "2012-09-01 18:50"};
-    private final static int COUNT = 8;
+    private final static int COUNT = 2;
     private void initData() {
 
         mNewsDetail.setText(newsDetailString);
@@ -283,134 +408,6 @@ public class NewsShow extends Activity {
         StringBuilder sbBuffer = new StringBuilder();
         sbBuffer.append(year + "-" + month + "-" + day + " " + hour + ":" + mins);
         return sbBuffer.toString();
-    }
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        mImClient.close(avimClientCallback);
-        finish();
-        return true;
-    }
-
-    private class myAsyncTask extends  AsyncTask<String,String,Spanned> {
-
-        @Override
-        protected Spanned doInBackground(String... params) {
-            Log.d("AsyncTask","in doInBackground");
-            Spanned spanned = Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
-                @Override
-                public Drawable getDrawable(String source) {
-                    Drawable drawable;
-                    URL url;
-                    try {
-                        url = new URL(source);
-                        //Log.d("打开URL成功", ""+url);
-                        InputStream is = url.openStream();
-                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
-                    } catch (Exception e) {
-                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
-                        return null;
-                    }
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
-                            .getIntrinsicHeight());
-
-                    return drawable;
-                }
-            }, null);
-            //Log.d("WRH","in doInBackground after html, spanned = "+spanned);
-            return spanned;
-        }
-
-        @Override
-        protected void onPostExecute(Spanned result)
-        {
-            //Log.d("WRH","in onPostExecute, result = "+result);
-            //更新UI的操作，这里面的内容是在UI线程里面执行的
-            mNewsDetail.setText(result);
-        }
-    }
-
-
-    private void loginChat() {
-        Log.d("iniChat", "begin");
-        mImClient = AVIMClient.getInstance("share");
-        mImClient.open(new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient client, AVException e) {
-                if (null != e) {
-                    // 出错了，可能是网络问题无法连接 LeanCloud 云端，请检查网络之后重试。
-                    // 此时聊天服务不可用。
-                    e.printStackTrace();
-                } else {
-                    // 成功登录，可以开始进行聊天了（假设为 MainActivity）。
-                    //Intent intent = new Intent(currentActivity, MainActivity.class);
-                    //currentActivity.startActivity(intent);
-                    Log.d("iniChat", "ok");
-                    joinGroupChat();
-                }
-            }
-        });
-        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
-    }
-    class CustomMessageHandler extends AVIMMessageHandler {
-        @Override
-        public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client) {
-            // 新消息到来了。在这里增加你自己的处理代码。
-            String msgContent = message.getContent();
-            Log.d("onMessage",conversation.getConversationId() + " 收到一条新消息：" + msgContent);
-        }
-    }
-    private void joinGroupChat() {
-        //final ChatManager chatManager = ChatManager.getInstance();
-
-
-        //mAvimConversation = new AVIMConversation(mImClient,"5545ca24e4b03ccbae7046a6");
-        AVObject avObject = obj.getAVObject("conv");
-        String newsConvId = avObject.getString("objectId");
-        AVIMConversationQuery conversationQuery = mImClient.getQuery();
-//        AVIMConversation conversation = mImClient.getConversation(newsConvId);
-//        Log.d("JoinGroupChat", conversation + "");
-        //conversationQuery.containsMembers(clients);
-
-        // 之前有常量定义：
-        // const int ConversationType_OneOne = 0;
-        // const int ConversationType_Group = 1;
-        //conversationQuery.whereEqualTo("attr.type", ConversationType_Group);
-        conversationQuery.findInBackground(new AVIMConversationQueryCallback(){
-            @Override
-            public void done(List<AVIMConversation> conversations, AVException e) {
-                Log.d("find done","");
-                if (null != e) {
-                    // 出错了。。。
-                    e.printStackTrace();
-                } else {
-                    if (null != conversations) {
-                        AVObject avObject1 = obj.getAVObject("conv");
-                        String newsConvId = avObject1.getObjectId();
-                        Log.d("after find Convs", "  newConvID=" + newsConvId + "conv:"+avObject1);
-                        int size = conversations.size();
-                        for (int i = 0; i < size; i++) {
-                            AVIMConversation avimConversation = conversations.get(i);
-                            String convId = avimConversation.getConversationId();
-                            Log.d("after find Convs", "convID=" + convId + "  newConvID=" + newsConvId);
-                            if (convId.equals(newsConvId)) {
-                                //find the conversation
-                                Log.d("search room", "find it");
-                                mAvimConversation = avimConversation;
-                                mAvimConversation.join(new AVIMConversationCallback() {
-                                    @Override
-                                    public void done(AVException e) {
-                                        Log.d("join", "done!");
-                                    }
-                                });
-                                break;
-                            }
-                        }
-                        Log.d("find conversation", "找到了符合条件的 " + conversations.size() + " 个对话");
-                    } else {
-                        Log.d("fail to find conversati","没有找到符合条件的对话");
-                    }
-                }
-            }
-        });
     }
 
 }
