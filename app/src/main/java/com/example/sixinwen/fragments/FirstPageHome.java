@@ -126,7 +126,8 @@ public class FirstPageHome extends Fragment{
                     try {
                         String source = obj.getAVFile("Picture").getUrl();
                         URL url = new URL(source);
-                        InputStream is = url.openStream();Log.d("打开URL成功", "");
+                        InputStream is = url.openStream();
+                        //Log.d("打开URL成功", "");
                         drawable = Drawable.createFromStream(is, "");  //获取网路图片
                     } catch (Exception e) {
                         Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());

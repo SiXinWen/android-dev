@@ -1,7 +1,6 @@
 package com.example.sixinwen;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,14 +18,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVFile;
+import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.im.v2.AVIMClient;
+import com.avos.avoscloud.im.v2.AVIMConversation;
+import com.avos.avoscloud.im.v2.AVIMConversationQuery;
+import com.avos.avoscloud.im.v2.AVIMMessage;
+import com.avos.avoscloud.im.v2.AVIMMessageHandler;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
+
+//import com.avoscloud.leanchatlib.controller.ChatManager;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
-import com.example.sixinwen.utils.NewsItem;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -41,6 +52,8 @@ import static android.view.View.OnClickListener;
  * Created by wangrunhui on 3/26/15.
  */
 public class NewsShow extends Activity {
+    final int ConversationType_OneOne = 0;
+    final int ConversationType_Group = 1;
     private Button mLeftSend;
     private Button mRightSend;
     private Button mBack;
@@ -77,23 +90,32 @@ public class NewsShow extends Activity {
             }
         }
     };
-
+    private AVIMConversation mAvimConversation;
+    private AVIMClient mImClient;
+    private AVIMClientCallback avimClientCallback;
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        //AVOSCloud.initialize(this, "epg58oo2271uuupna7b9awz9nzpcxes870uj0j0rzeqkm8mh", "xjgx65z5yavhg8nj4r48004prjelkq0fzz9xgricyb2nh0qq");
         setContentView(R.layout.news_show);
+        //AVOSCloud.setDebugLogEnabled(true);
         initView();
+        avimClientCallback = new AVIMClientCallback() {
+            @Override
+            public void done(AVIMClient avimClient, AVException e) {
+                Log.d("Logout", "log out successfully");
+            }
+        };
+
         Bundle bundle = getIntent().getExtras();
-        indexOfNews = bundle.getInt("NewsIndex");Log.d("WRHH", "" + indexOfNews);
+        indexOfNews = bundle.getInt("NewsIndex");
         initData();
         //AVAnalytics.trackAppOpened(getIntent());
         AVQuery<AVObject> query = new AVQuery<>("News");
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
-                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+                    //Log.d("newsShow成功", "查询到" + avObjects.size() + " 条符合条件的数据");
                     obj = avObjects.get(indexOfNews + 1);
                     mNewsTitle.setText(obj.getString("Title"));
                     double support = obj.getDouble("SupportRatio");
@@ -137,6 +159,7 @@ public class NewsShow extends Activity {
         mBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                mImClient.close(avimClientCallback);
                 finish();
             }
         });
@@ -154,11 +177,7 @@ public class NewsShow extends Activity {
         });
 
         mShowTitle.setOnClickListener(mTitleClick);
-
-        AVObject testObject = new AVObject("TestObject");
-        //testObject.put("foo", "hehe");
-        //testObject.saveInBackground();
-        initConversation();
+        loginChat();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
@@ -211,8 +230,7 @@ public class NewsShow extends Activity {
         mChatMsgViewAdapter = new ChatMsgViewAdapter(this, mDataArrays);
         mListView.setAdapter(mChatMsgViewAdapter);
     }
-    private void leftSend()
-    {
+    private void leftSend() {
         String contString = mEditText.getText().toString();
         if (contString.length() > 0)
         {
@@ -260,6 +278,7 @@ public class NewsShow extends Activity {
         return sbBuffer.toString();
     }
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        mImClient.close(avimClientCallback);
         finish();
         return true;
     }
@@ -268,7 +287,7 @@ public class NewsShow extends Activity {
 
         @Override
         protected Spanned doInBackground(String... params) {
-            Log.d("WRH","in doInBackground");
+            Log.d("AsyncTask","in doInBackground");
             Spanned spanned = Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
                 @Override
                 public Drawable getDrawable(String source) {
@@ -276,7 +295,7 @@ public class NewsShow extends Activity {
                     URL url;
                     try {
                         url = new URL(source);
-                        Log.d("打开URL成功", ""+url);
+                        //Log.d("打开URL成功", ""+url);
                         InputStream is = url.openStream();
                         drawable = Drawable.createFromStream(is, "");  //获取网路图片
                     } catch (Exception e) {
@@ -302,9 +321,11 @@ public class NewsShow extends Activity {
         }
     }
 
-    private void initConversation() {
-        AVIMClient imClient = AVIMClient.getInstance("Tom");
-        imClient.open(new IMClientCallback(){
+
+    private void loginChat() {
+        Log.d("iniChat", "begin");
+        mImClient = AVIMClient.getInstance("share");
+        mImClient.open(new AVIMClientCallback() {
             @Override
             public void done(AVIMClient client, AVException e) {
                 if (null != e) {
@@ -315,7 +336,72 @@ public class NewsShow extends Activity {
                     // 成功登录，可以开始进行聊天了（假设为 MainActivity）。
                     //Intent intent = new Intent(currentActivity, MainActivity.class);
                     //currentActivity.startActivity(intent);
-                };
+                    Log.d("iniChat", "ok");
+                    joinGroupChat();
+                }
+            }
+        });
+        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
+    }
+    class CustomMessageHandler extends AVIMMessageHandler {
+        @Override
+        public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client) {
+            // 新消息到来了。在这里增加你自己的处理代码。
+            String msgContent = message.getContent();
+            Log.d("onMessage",conversation.getConversationId() + " 收到一条新消息：" + msgContent);
+        }
+    }
+    private void joinGroupChat() {
+        //final ChatManager chatManager = ChatManager.getInstance();
+
+
+        //mAvimConversation = new AVIMConversation(mImClient,"5545ca24e4b03ccbae7046a6");
+        AVObject avObject = obj.getAVObject("conv");
+        String newsConvId = avObject.getString("objectId");
+        AVIMConversationQuery conversationQuery = mImClient.getQuery();
+//        AVIMConversation conversation = mImClient.getConversation(newsConvId);
+//        Log.d("JoinGroupChat", conversation + "");
+        //conversationQuery.containsMembers(clients);
+
+        // 之前有常量定义：
+        // const int ConversationType_OneOne = 0;
+        // const int ConversationType_Group = 1;
+        //conversationQuery.whereEqualTo("attr.type", ConversationType_Group);
+        conversationQuery.findInBackground(new AVIMConversationQueryCallback(){
+            @Override
+            public void done(List<AVIMConversation> conversations, AVException e) {
+                Log.d("find done","");
+                if (null != e) {
+                    // 出错了。。。
+                    e.printStackTrace();
+                } else {
+                    if (null != conversations) {
+                        AVObject avObject1 = obj.getAVObject("conv");
+                        String newsConvId = avObject1.getObjectId();
+                        Log.d("after find Convs", "  newConvID=" + newsConvId + "conv:"+avObject1);
+                        int size = conversations.size();
+                        for (int i = 0; i < size; i++) {
+                            AVIMConversation avimConversation = conversations.get(i);
+                            String convId = avimConversation.getConversationId();
+                            Log.d("after find Convs", "convID=" + convId + "  newConvID=" + newsConvId);
+                            if (convId.equals(newsConvId)) {
+                                //find the conversation
+                                Log.d("search room", "find it");
+                                mAvimConversation = avimConversation;
+                                mAvimConversation.join(new AVIMConversationCallback() {
+                                    @Override
+                                    public void done(AVException e) {
+                                        Log.d("join", "done!");
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                        Log.d("find conversation", "找到了符合条件的 " + conversations.size() + " 个对话");
+                    } else {
+                        Log.d("fail to find conversati","没有找到符合条件的对话");
+                    }
+                }
             }
         });
     }
