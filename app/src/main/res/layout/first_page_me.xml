@@ -108,8 +108,8 @@
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
 
                         <ImageView
                             android:layout_width="0dp"
@@ -141,9 +141,8 @@
                             android:src="@drawable/tri"/>
 
                     </TableRow>
-
                     <TableRow
-                        android:id="@+id/more_page_row1_5"
+                        android:id="@+id/more_page_row_1_5"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -152,14 +151,14 @@
                         android:paddingTop="0.0dip" >
 
                     </TableRow>
-
                     <TableRow
                         android:id="@+id/more_page_row2"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
+                        android:layout_height="30dp"
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
 
                         <ImageView
                             android:layout_width="0dp"
@@ -223,9 +222,8 @@
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
-
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
 
                         <ImageView
                             android:layout_width="0dp"
@@ -249,15 +247,14 @@
                             android:textSize="16.0sp" />
 
                         <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
+                            android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:layout_gravity="right"
                             android:gravity="center_vertical"
                             android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"
-                            />
+                            android:src="@drawable/tri"/>
                     </TableRow>
+
                 </TableLayout>
             </LinearLayout>
 
@@ -290,8 +287,8 @@
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
 
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
 
                         <ImageView
                             android:layout_width="0dp"
@@ -339,8 +336,8 @@
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
 
-                        android:paddingBottom="16.0dip"
-                        android:paddingTop="16.0dip" >
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
 
                         <ImageView
                             android:layout_width="0dp"

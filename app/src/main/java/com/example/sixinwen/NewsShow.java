@@ -67,6 +67,7 @@ public class NewsShow extends Activity {
 
     private ImageView mShowTitle;
     private TextView mNewsTitle;
+    private LinearLayout mBloodBar;
     private String newsDetailString = "";
     private TextView mNewsDetail;
     private TextView mSupportLine;
@@ -76,7 +77,10 @@ public class NewsShow extends Activity {
     private OnClickListener mTitleClick = new OnClickListener() {
         public void onClick (View v) {
             switch(v.getId()) {
+
+                case R.id.news_show_title:
                 case R.id.et_news_title:
+                case R.id.bloodbar:
                     if(hideText) {
                         mNewsDetail.setVisibility(View.VISIBLE);
                         hideText = false;
@@ -177,6 +181,8 @@ public class NewsShow extends Activity {
         });
 
         mShowTitle.setOnClickListener(mTitleClick);
+        mNewsTitle.setOnClickListener(mTitleClick);
+        mBloodBar.setOnClickListener(mTitleClick);
         loginChat();
     }
     private void initView() {
@@ -188,6 +194,7 @@ public class NewsShow extends Activity {
 
         mShowTitle = (ImageView)findViewById(R.id.et_news_title);
         mNewsTitle = (TextView)findViewById(R.id.news_show_title);
+        mBloodBar = (LinearLayout)findViewById(R.id.bloodbar);
         mNewsDetail = (TextView)findViewById(R.id.et_news_detail);
         mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
         mSupportLine = (TextView) findViewById(R.id.news_show_support);
