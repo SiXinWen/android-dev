@@ -9,11 +9,12 @@
         android:gravity="center_vertical"
         android:background="#1976f0">
         <Button
+            android:layout_marginLeft="12dp"
             android:id="@+id/news_show_back"
             android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="0.6"
-            android:background="@drawable/back"/>
+            android:layout_height="22dp"
+            android:layout_weight="0.35"
+            android:background="@drawable/back_arrow"/>
         <LinearLayout
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
@@ -47,11 +48,12 @@
                 />
         </LinearLayout>
         <Button
+            android:layout_marginRight="12dp"
             android:id="@+id/news_show_share"
             android:visibility="visible"
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.6"
             android:background="@drawable/share"/>
     </LinearLayout>
     <ScrollView
@@ -68,10 +70,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:background="#ffffff"
-                android:text="女教师辞职信走红"
+                android:text=""
                 android:gravity="center"
                 android:textColor="#000000"
-                android:textSize="18sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/et_news_detail"
@@ -102,7 +104,7 @@
                         android:layout_height="match_parent"
                         android:background="#5aa5f8"
                         android:textColor="#ffffff"
-                        android:text="超有勇气"
+                        android:text=""
                         android:gravity="center_vertical"/>
                     <TextView
                         android:id="@+id/news_show_oppose"
@@ -112,7 +114,7 @@
                         android:background="#f75153"
                         android:layout_height="match_parent"
                         android:textColor="#ffffff"
-                        android:text="好不现实"
+                        android:text=""
                         android:gravity="end|center_vertical"/>
 
                 </LinearLayout>
@@ -125,7 +127,7 @@
             <ImageView
                 android:id="@+id/et_news_title"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="20dp"
                 android:gravity="center_vertical|center_horizontal"
                 android:background="#ffffffff"
                 android:src="@drawable/down"/>
@@ -178,7 +180,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
-                    android:text="send" />
+                    android:background="#FF5AA5F8"
+                    android:textColor="#ffffff"
+                    android:text="顶" />
                 <EditText
                     android:inputType="textMultiLine"
                     android:scrollHorizontally="false"
@@ -197,10 +201,11 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="40dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
-                    android:text="send" />
+                    android:layout_marginLeft="10dp"
+                    android:background="#FFF75153"
+                    android:textColor="#ffffff"
+                    android:text="踩" />
             </LinearLayout>
         </LinearLayout>
 

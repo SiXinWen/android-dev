@@ -59,8 +59,6 @@ import static android.view.View.OnClickListener;
  * Created by wangrunhui on 3/26/15.
  */
 public class NewsShow extends Activity {
-    final int ConversationType_OneOne = 0;
-    final int ConversationType_Group = 1;
     private Button mLeftSend;
     private Button mRightSend;
     private Button mBack;
@@ -69,7 +67,7 @@ public class NewsShow extends Activity {
     private ListView mListView;
     private List<ChatMsgEntity> mDataArrays = new ArrayList<>();
     private AVObject news;
-    private int indexOfNews;
+    private String indexOfNews;
     private AVObject obj;
 
     private ImageView mShowTitle;
@@ -123,14 +121,15 @@ public class NewsShow extends Activity {
         };
 
         Bundle bundle = getIntent().getExtras();
-        indexOfNews = bundle.getInt("NewsIndex");
+        indexOfNews = bundle.getString("NewsIndex");
         //AVAnalytics.trackAppOpened(getIntent());
         AVQuery<AVObject> query = new AVQuery<>("News");
+        query.whereEqualTo("objectId", indexOfNews);
         query.findInBackground(new FindCallback<AVObject>() {
             public void done(List<AVObject> avObjects, AVException e) {
                 if (e == null) {
                     //Log.d("newsShow成功", "查询到" + avObjects.size() + " 条符合条件的数据");
-                    obj = avObjects.get(indexOfNews + 1);
+                    obj = avObjects.get(0);
                     mNewsTitle.setText(obj.getString("Title"));
                     double support = obj.getDouble("SupportRatio");
                     LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
@@ -140,7 +139,7 @@ public class NewsShow extends Activity {
                     mSupportLine.setText(obj.getString("AffirmativeView"));
                     lp2.weight = (float)(1-support);
                     mOpposeLine.setLayoutParams(lp2);
-                    mOpposeLine.setText("OpposeView");
+                    mOpposeLine.setText(obj.getString("OpposeView"));
  /*                   new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -229,9 +228,10 @@ public class NewsShow extends Activity {
                 public Drawable getDrawable(String source) {
                     Drawable drawable;
                     URL url;
+                    Log.d("正在打开URL", "");
                     try {
                         url = new URL(source);
-                        //Log.d("打开URL成功", ""+url);
+                        Log.d("打开URL成功", ""+url);
                         InputStream is = url.openStream();
                         drawable = Drawable.createFromStream(is, "");  //获取网路图片
                     } catch (Exception e) {
@@ -244,7 +244,7 @@ public class NewsShow extends Activity {
                     return drawable;
                 }
             }, null);
-            //Log.d("WRH","in doInBackground after html, spanned = "+spanned);
+            Log.d("WRH","in doInBackground after html, spanned = "+spanned);
             return spanned;
         }
 
@@ -344,7 +344,8 @@ public class NewsShow extends Activity {
                             mAvimConversation = avimConversation;
                             mAvimConversation.join(new AVIMConversationCallback() {
                                     @Override
-                                    public void done(AVException e) {Log.d("join", "done!");
+                                    public void done(AVException e) {
+                                        Log.d("join", "done!");
                                         initData();
 
                                     }
@@ -361,7 +362,8 @@ public class NewsShow extends Activity {
     }
 
     private void initData() {
-        mNewsDetail.setText(newsDetailString);
+        //mNewsDetail.setText(newsDetailString);
+        Log.d("search history", "begin");
         mAvimConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
             @Override
             public void done(List<AVIMMessage> list, AVException e) {
@@ -399,8 +401,8 @@ public class NewsShow extends Activity {
                         mDataArrays.add(entity);
                     }
                 }
-
                 mListView.setAdapter(mChatMsgViewAdapter);
+                mListView.setSelection(mDataArrays.size() - 1);
             }
         });
 

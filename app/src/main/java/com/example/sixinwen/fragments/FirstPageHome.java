@@ -64,7 +64,7 @@ public class FirstPageHome extends Fragment{
                 Intent intent = new Intent(getActivity(),NewsShow.class);
                 Bundle bundle = new Bundle();
                 Log.d("WRH", "bundle put " + newslist.get(position));
-                bundle.putInt("NewsIndex", position);
+                bundle.putString("NewsIndex", newslist.get(position).getObjectId());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -101,7 +101,10 @@ public class FirstPageHome extends Fragment{
                     int size = avObjects.size();
                     for (int i = 1; i < size; i++) {
                         AVObject obj = avObjects.get(i);
-                        newslist.add(obj);
+                        boolean show = obj.getBoolean("Now");
+                        if (show){
+                            newslist.add(obj);
+                        }
                     }
                     new Thread(updateNewsRunnable).start();
                 } else {
