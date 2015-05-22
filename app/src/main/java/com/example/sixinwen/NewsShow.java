@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVFile;
@@ -29,11 +30,14 @@ import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.AVIMMessageHandler;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
+import com.avos.avoscloud.im.v2.AVIMTypedMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 
 //import com.avoscloud.leanchatlib.controller.ChatManager;
+import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
+import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
 
@@ -44,7 +48,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static android.view.View.OnClickListener;
 
@@ -98,12 +105,16 @@ public class NewsShow extends Activity {
     private AVIMClient mImClient;
     private AVIMClientCallback avimClientCallback;
 
+
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.news_show);
         //AVOSCloud.setDebugLogEnabled(true);
+        mChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mDataArrays);
         initView();
+        mLeftSend.setClickable(false);
+        mRightSend.setClickable(false);
         avimClientCallback = new AVIMClientCallback() {
             @Override
             public void done(AVIMClient avimClient, AVException e) {
@@ -113,7 +124,6 @@ public class NewsShow extends Activity {
 
         Bundle bundle = getIntent().getExtras();
         indexOfNews = bundle.getInt("NewsIndex");
-        initData();
         //AVAnalytics.trackAppOpened(getIntent());
         AVQuery<AVObject> query = new AVQuery<>("News");
         query.findInBackground(new FindCallback<AVObject>() {
@@ -250,6 +260,8 @@ public class NewsShow extends Activity {
 
     private void loginChat() {
         Log.d("iniChat", "begin");
+        //注意！！AVIMMessageManager.registerDefaultMessageHandler() 一定要在 AVIMClient.open() 之前调用，否则可能导致服务器发回来的部分消息丢失。
+        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
         mImClient = AVIMClient.getInstance("wangrunhui");
         mImClient.open(new AVIMClientCallback() {
             @Override
@@ -267,12 +279,29 @@ public class NewsShow extends Activity {
                 }
             }
         });
-        AVIMMessageManager.registerDefaultMessageHandler(new CustomMessageHandler());
+
     }
     class CustomMessageHandler extends AVIMMessageHandler {
         @Override
         public void onMessage(AVIMMessage message, AVIMConversation conversation, AVIMClient client) {
             // 新消息到来了。在这里增加你自己的处理代码。
+            Map<String, Object> attr = ((AVIMTextMessage)message).getAttrs();
+            Boolean attitude = (Boolean) attr.get("attitude");
+            String comment = message.getContent();
+            ChatMsgEntity entity = new ChatMsgEntity();
+            if (attitude.equals(Boolean.TRUE)) {
+                entity.setDate("" + message.getTimestamp());
+                entity.setText(comment);
+                entity.setMsgType(true);
+                entity.setName("支持方");
+            } else {
+                entity.setDate("" + message.getTimestamp());
+                entity.setText(comment);
+                entity.setMsgType(false);
+                entity.setName("反对方");
+            }
+            mDataArrays.add(entity);
+            mChatMsgViewAdapter.notifyDataSetChanged();
             String msgContent = message.getContent();
             Log.d("onMessage",conversation.getConversationId() + " 收到一条新消息：" + msgContent);
         }
@@ -316,6 +345,8 @@ public class NewsShow extends Activity {
                             mAvimConversation.join(new AVIMConversationCallback() {
                                     @Override
                                     public void done(AVException e) {Log.d("join", "done!");
+                                        initData();
+
                                     }
                                 });
                         }
@@ -329,38 +360,50 @@ public class NewsShow extends Activity {
         });
     }
 
-
-
-
-    private String[] msgArray = new String[]{"  孩子们，要好好学习，天天向上！要好好听课，不要翘课！不要挂科，多拿奖学金！三等奖学金的争取拿二等，二等的争取拿一等，一等的争取拿励志！",
-            "姚妈妈还有什么吩咐..."};
-
-    private String[]dataArray = new String[]{"2012-09-01 18:00", "2012-09-01 18:10",
-            "2012-09-01 18:11", "2012-09-01 18:20",
-            "2012-09-01 18:30", "2012-09-01 18:35",
-            "2012-09-01 18:40", "2012-09-01 18:50"};
-    private final static int COUNT = 2;
     private void initData() {
-
         mNewsDetail.setText(newsDetailString);
+        mAvimConversation.queryMessages(20, new AVIMMessagesQueryCallback() {
+            @Override
+            public void done(List<AVIMMessage> list, AVException e) {
+                Log.d("get history", "find messagae list");
+                mRightSend.setClickable(true);
+                mLeftSend.setClickable(true);
+                Toast.makeText(NewsShow.this, "可以进行评论啦！", Toast.LENGTH_SHORT);
+                if (list == null) {
+                    return;
+                } else {
+                    int size = list.size();
+                    for (int i = 0; i < size; i++) {
+                        AVIMTextMessage avimTextMessage = (AVIMTextMessage) list.get(i);
+                        Map<String, Object> attr = avimTextMessage.getAttrs();
+                        Boolean attitude = (Boolean) attr.get("attitude");
+                        String comment = avimTextMessage.getContent();
+                        try {
+                            JSONObject jsonObject = new JSONObject(avimTextMessage.getContent());
+                            comment = jsonObject.getString("_lctext");
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                        ChatMsgEntity entity = new ChatMsgEntity();
+                        if (attitude.equals(Boolean.TRUE)) {
+                            entity.setDate("" + avimTextMessage.getTimestamp());
+                            entity.setText(comment);
+                            entity.setMsgType(true);
+                            entity.setName("支持方");
+                        } else {
+                            entity.setDate("" + avimTextMessage.getTimestamp());
+                            entity.setText(comment);
+                            entity.setMsgType(false);
+                            entity.setName("反对方");
+                        }
+                        mDataArrays.add(entity);
+                    }
+                }
 
-        for(int i = 0; i < COUNT; i++) {
-            ChatMsgEntity entity = new ChatMsgEntity();
-            entity.setDate(dataArray[i]);
-            if (i % 2 == 0)
-            {
-                entity.setName("姚妈妈");
-                entity.setMsgType(true);
-            }else{
-                entity.setName("Shamoo");
-                entity.setMsgType(false);
+                mListView.setAdapter(mChatMsgViewAdapter);
             }
+        });
 
-            entity.setText(msgArray[i]);
-            mDataArrays.add(entity);
-        }
-        mChatMsgViewAdapter = new ChatMsgViewAdapter(this, mDataArrays);
-        mListView.setAdapter(mChatMsgViewAdapter);
     }
     private void leftSend() {
         String contString = mEditText.getText().toString();
@@ -376,7 +419,18 @@ public class NewsShow extends Activity {
             mEditText.setText("");
             mListView.setSelection(mListView.getCount() - 1);
             mChatMsgViewAdapter.notifyDataSetChanged();//NotifyDataSetChanged();
-            mListView.setSelection(mDataArrays.size()-1);
+            mListView.setSelection(mDataArrays.size() - 1);
+            AVIMTextMessage avimTextMessage = new AVIMTextMessage();
+            Map<String, Object> attr = new Hashtable<>();
+            attr.put("attitude", Boolean.TRUE);
+            avimTextMessage.setText(contString);
+            avimTextMessage.setAttrs(attr);
+            mAvimConversation.sendMessage(avimTextMessage, new AVIMConversationCallback() {
+                @Override
+                public void done(AVException e) {
+                    Log.d("Send message", "Left done");
+                }
+            });
         }
     }
     private void rightSend() {
@@ -394,6 +448,17 @@ public class NewsShow extends Activity {
             mListView.setSelection(mListView.getCount() - 1);
             mChatMsgViewAdapter.notifyDataSetChanged();
             mListView.setSelection(mDataArrays.size()-1);
+            AVIMTextMessage avimTextMessage = new AVIMTextMessage();
+            Map<String, Object> attr = new Hashtable<>();
+            attr.put("attitude", Boolean.FALSE);
+            avimTextMessage.setText(contString);
+            avimTextMessage.setAttrs(attr);
+            mAvimConversation.sendMessage(avimTextMessage, new AVIMConversationCallback() {
+                @Override
+                public void done(AVException e) {
+                    Log.d("Send message", "Right done");
+                }
+            });
         }
     }
 
