@@ -3,7 +3,7 @@
     android:id="@+id/empty_cart_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ffefebe7" >
+    android:background="#ffffffff" >
 
     <LinearLayout
         android:id="@+id/top_relative"
@@ -18,7 +18,7 @@
             android:gravity="center"
             android:padding="10.0dip"
             android:singleLine="true"
-            android:text="撕新闻"
+            android:text="关于我们"
             android:textColor="#ffffffff"
             android:textSize="20sp" />
     </LinearLayout>
@@ -56,43 +56,51 @@
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
-                        android:paddingBottom="8.0dip"
-                        android:paddingTop="16.0dip" >
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="70dp"
-                            android:layout_gravity="center_vertical"
-                            android:gravity="center_vertical"
-                            android:src="@drawable/icon" />
+                        android:paddingBottom="0.0dip"
+                        android:paddingTop="50.0dip" >
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="70dp"
                             android:layout_weight="4"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="17.0dip"
-                            android:text="撕粉001"
+                            android:text=""
+                            android:textColor="#ff333333"
+                            android:textSize="16.0sp" />
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_weight="0.5"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:background="@drawable/icon_bg">
+                            <ImageView
+                                android:layout_width="fill_parent"
+                                android:layout_height="75dp"
+                                android:layout_gravity="center"
+                                android:layout_margin="5dp"
+                                android:gravity="center"
+                                android:src="@drawable/sixinwen" />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="70dp"
+                            android:layout_weight="4"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="17.0dip"
+                            android:text=""
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
                     </TableRow>
             </TableLayout>
         </LinearLayout>
 
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10.0dip"
-                android:layout_marginTop="10.0dip"
-                android:gravity="center_vertical"
-                android:paddingLeft="4.0dip"
-                android:text=""
-                android:textColor="#ff888888"
-                android:textSize="16.0sp" />
-
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                >
 
                 <TableLayout
                     android:id="@+id/MorePageTableLayout_Follow"
@@ -111,46 +119,42 @@
                         android:paddingBottom="1.0dip"
                         android:paddingTop="1.0dip" >
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10.0dip"
-                            android:src="@drawable/person2"
-                            />
-
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="5"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="10.0dip"
-                            android:text="修改昵称"
+                            android:paddingLeft="17.0dip"
+                            android:text=""
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10.0dip"
+                            android:text="撕新闻"
+                            android:textColor="#ff333333"
+                            android:textSize="25.0sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
                             android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"/>
+                            android:includeFontPadding="false"
+                            android:paddingLeft="17.0dip"
+                            android:text=""
+                            android:textColor="#ff333333"
+                            android:textSize="16.0sp" />
 
                     </TableRow>
-                    <TableRow
-                        android:id="@+id/more_page_row_1_5"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="2.0dip"
-                        android:layout_marginRight="2.0dip"
-                        android:background="#1d000000"
-                        android:paddingBottom="1.0dip"
-                        android:paddingTop="0.0dip" >
 
-                    </TableRow>
                     <TableRow
                         android:id="@+id/more_page_row2"
                         android:layout_width="fill_parent"
@@ -160,34 +164,39 @@
                         android:paddingBottom="1.0dip"
                         android:paddingTop="1.0dip" >
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10.0dip"
-                            android:src="@drawable/password"
-                            />
-
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_height="fill_parent"
-                            android:layout_weight="5"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
-                            android:paddingLeft="10.0dip"
-                            android:text="修改密码"
+                            android:paddingLeft="17.0dip"
+                            android:text=""
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:gravity="center"
+                            android:layout_gravity="center_horizontal"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10.0dip"
+                            android:text="撕出你的态度"
+                            android:textColor="#ff333333"
+                            android:textSize="25.0sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"/>
+                            android:includeFontPadding="false"
+                            android:paddingLeft="17.0dip"
+                            android:text=""
+                            android:textColor="#ff333333"
+                            android:textSize="16.0sp" />
                     </TableRow>
 
                 </TableLayout>
@@ -225,15 +234,7 @@
                         android:paddingBottom="1.0dip"
                         android:paddingTop="1.0dip" >
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10.0dip"
-                            android:src="@drawable/star"
-                            />
+
 
                         <TextView
                             android:layout_width="0dp"
@@ -242,17 +243,11 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="10.0dip"
-                            android:text="我的收藏"
+                            android:text=""
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
-                            android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"/>
+
                     </TableRow>
 
                 </TableLayout>
@@ -290,15 +285,7 @@
                         android:paddingBottom="1.0dip"
                         android:paddingTop="1.0dip" >
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10.0dip"
-                            android:src="@drawable/pen"
-                            />
+
 
                         <TextView
                             android:layout_width="0dp"
@@ -307,31 +294,14 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="10.0dip"
-                            android:text="用户反馈"
+                            android:text="安卓版开发人员：王润辉、贺心蕊"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="right"
-                            android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"/>
-                    </TableRow>
-                    <TableRow
-                        android:id="@+id/more_page_row4_5"
-                        android:layout_width="fill_parent"
-                        android:layout_marginLeft="2.0dip"
-                        android:layout_marginRight="2.0dip"
-                        android:background="#1d000000"
-                        android:paddingBottom="1.0dip"
-                        android:paddingTop="0.0dip" >
 
                     </TableRow>
-
                     <TableRow
-                        android:id="@+id/me_about_us"
+                        android:id="@+id/homepage"
                         android:layout_width="fill_parent"
                         android:layout_marginLeft="2.0dip"
                         android:layout_marginRight="2.0dip"
@@ -339,15 +309,7 @@
                         android:paddingBottom="1.0dip"
                         android:paddingTop="1.0dip" >
 
-                        <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.5"
-                            android:layout_height="fill_parent"
-                            android:layout_gravity="center"
-                            android:gravity="center_vertical"
-                            android:paddingLeft="10.0dip"
-                            android:src="@drawable/people"
-                            />
+
 
                         <TextView
                             android:layout_width="0dp"
@@ -356,17 +318,60 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:paddingLeft="10.0dip"
-                            android:text="关于我们"
+                            android:text="应用主页：https://sixinwen.com\n"
                             android:textColor="#ff333333"
                             android:textSize="16.0sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/more_page_row6"
+                        android:layout_width="fill_parent"
+                        android:layout_marginLeft="2.0dip"
+                        android:layout_marginRight="2.0dip"
+
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
+
+
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="fill_parent"
-                            android:layout_gravity="right"
+                            android:layout_weight="5"
                             android:gravity="center_vertical"
-                            android:paddingRight="20.0dip"
-                            android:src="@drawable/tri"/>
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10.0dip"
+                            android:text="版本：1.0\n"
+                            android:textColor="#ff333333"
+                            android:textSize="16.0sp" />
+
+
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/contact"
+                        android:layout_width="fill_parent"
+                        android:layout_marginLeft="2.0dip"
+                        android:layout_marginRight="2.0dip"
+
+                        android:paddingBottom="1.0dip"
+                        android:paddingTop="1.0dip" >
+
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="5"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:paddingLeft="10.0dip"
+                            android:text="有任何问题请联系我们：\nsixinwen@contact.com"
+                            android:textColor="#ff333333"
+                            android:textSize="16.0sp" />
+
+
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
