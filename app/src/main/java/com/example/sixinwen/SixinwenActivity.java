@@ -10,14 +10,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.FunctionCallback;
 import com.avos.avoscloud.SaveCallback;
 import com.example.sixinwen.fragments.FirstPageHome;
 import com.example.sixinwen.fragments.FirstPageMe;
 import com.example.sixinwen.fragments.FirstPageMessage;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 
 public class SixinwenActivity extends Activity implements View.OnClickListener{
@@ -49,7 +54,19 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
         initViews();
         mFragmentManager = getFragmentManager();
         setTabSelection(0);
+        //! ! ! ! ! ! register test
+        Map<String,Object> parameters = new Hashtable<>();
+        parameters.put("InsID","Wangrunhui");
 
+        AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
+            public void done(Object object, AVException e) {
+                if (e == null) {
+                    Log.d("sign up", "secceed!" + object.toString());
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 
