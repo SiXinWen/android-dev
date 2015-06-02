@@ -25,6 +25,7 @@ import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
 import com.avos.avoscloud.GetCallback;
 import com.avos.avoscloud.GetDataCallback;
+import com.example.sixinwen.MyApplication;
 import com.example.sixinwen.NewsShow;
 import com.example.sixinwen.R;
 import com.example.sixinwen.adapter.FirstPageNewsAdapter;
@@ -72,86 +73,15 @@ public class FirstPageHome extends Fragment{
     }
     void init() {
         mListView = (ListView)getActivity().findViewById(R.id.first_page_listview);
-        newsItemList = new ArrayList<>();
+        newsItemList = MyApplication.getNewsItemList();
+        newslist = MyApplication.getNewslist();
         final ImageView imageView = new ImageView(getActivity());
         imageView.setImageResource(R.drawable.win10tx);
-        mAdapter = new FirstPageNewsAdapter(getActivity(), newsItemList);
-        mHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 1:
-                        mAdapter.notifyDataSetChanged();
-                        break;
-                    default:
-                        break;
-                }
-                super.handleMessage(msg);
-            }
-        };
-        AVQuery<AVObject> query = new AVQuery<>("News");
-        AVObject news = new AVObject("News");
-        String title,content;
-        newslist = new ArrayList<>();
-        //query.whereEqualTo("playerName", "steve");
-        query.findInBackground(new FindCallback<AVObject>() {
-            public void done(List<AVObject> avObjects, AVException e) {
-                if (e == null) {
-                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的数据");
-                    int size = avObjects.size();
-                    for (int i = 1; i < size; i++) {
-                        AVObject obj = avObjects.get(i);
-                        boolean show = obj.getBoolean("Now");
-                        if (show){
-                            newslist.add(obj);
-                        }
-                    }
-                    new Thread(updateNewsRunnable).start();
-                } else {
-                    Log.d("失败", "查询错误: " + e.getMessage());
-                }
-            }
-        });
+        mAdapter = MyApplication.getmAdapter();
+        mHandler = MyApplication.getmHandler();
+
         mListView.setAdapter(mAdapter);
-        updateNewsRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int size = newslist.size();
-
-                for (int i = 0; i < size; i++) {
-                    AVObject obj= newslist.get(i);
-                    //newslist.add(obj);
-                    //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
-                    double support = obj.getDouble("SupportRatio");
-                    //AVObject avFile = obj.getAVObject("Picture");
-                    //avFile.getDataInBackground(datacallback);
-                    Drawable drawable = null;
-                    try {
-                        String source = obj.getAVFile("Picture").getUrl();
-                        URL url = new URL(source);
-                        InputStream is = url.openStream();
-                        //Log.d("打开URL成功", "");
-                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
-                    } catch (Exception e) {
-                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
-                    }
-
-                    ImageView iw =  new ImageView(getActivity());
-                    iw.setImageDrawable(drawable);
-                    NewsItem newsItem = new NewsItem(obj.getString("Title"),
-                            obj.getString("Content"),
-                            support,
-                            1-support,
-                            iw,
-                            obj.getInt("CommentNum"));
-                    newsItemList.add(newsItem);
-                }
-                //mAdapter.notifyDataSetChanged();
-                Message msg = new Message();
-                msg.what = 1;
-                mHandler.sendMessage(msg);
-            }
-        };
+        mAdapter.notifyDataSetChanged();
 /*      //获得单个新闻的用法如下
         query.getInBackground("552e8498e4b036ba524410ea", new GetCallback<AVObject>() {
             public void done(AVObject inews, AVException e) {
