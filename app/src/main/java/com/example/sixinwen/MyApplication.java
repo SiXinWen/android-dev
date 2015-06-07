@@ -122,6 +122,7 @@ public class MyApplication extends Application {
                     AVObject obj= newslist.get(i);
                     //newslist.add(obj);
                     //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
+
                     double support = obj.getDouble("SupportNum");
                     double refute = obj.getDouble("RefuteNum");
                     //AVObject avFile = obj.getAVObject("Picture");

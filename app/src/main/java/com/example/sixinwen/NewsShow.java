@@ -144,6 +144,7 @@ public class NewsShow extends Activity {
                     //Log.d("newsShow成功", "查询到" + avObjects.size() + " 条符合条件的数据");
                     obj = avObjects.get(0);
                     mNewsTitle.setText(obj.getString("Title"));
+
                     double support = obj.getDouble("SupportNum");
                     double refute = obj.getDouble("RefuteNum");
                     LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
