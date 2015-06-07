@@ -1,12 +1,16 @@
 package com.example.sixinwen.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.sixinwen.NewsShow;
 import com.example.sixinwen.R;
 import com.example.sixinwen.utils.ChatMsgEntity;
 
@@ -103,6 +107,29 @@ public class ChatMsgViewAdapter extends BaseAdapter {
         viewHolder.tvSendTime.setText(entity.getDate());
         viewHolder.tvUserName.setText(entity.getName());
         viewHolder.tvContent.setText(entity.getText());
+        /*viewHolder.tvContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Dialog", NewsShow.getContext() + "");
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewsShow.getContext());
+                builder.setMessage("踩 or 赞");
+                builder.setTitle("你的态度");
+                builder.setPositiveButton("踩", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+                builder.setNegativeButton("赞", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+            }
+        });*/
 
         return convertView;
     }

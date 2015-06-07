@@ -1,6 +1,9 @@
 package com.example.sixinwen;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,8 +13,10 @@ import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,13 +64,20 @@ import static android.view.View.OnClickListener;
  * Created by wangrunhui on 3/26/15.
  */
 public class NewsShow extends Activity {
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
     private Button mLeftSend;
     private Button mRightSend;
-    private Button mBack;
+    private ImageButton mBack;
     private EditText mEditText;
     private ChatMsgViewAdapter mChatMsgViewAdapter;
     private ListView mListView;
     private List<ChatMsgEntity> mDataArrays = new ArrayList<>();
+    private List<ChatMsgEntity> mHotArrays = new ArrayList<>();
+    private List<String> mCommentIds = new ArrayList<>();
     private AVObject news;
     private String indexOfNews;
     private AVObject obj;
@@ -73,10 +85,12 @@ public class NewsShow extends Activity {
     private ImageView mShowTitle;
     private TextView mNewsTitle;
     private LinearLayout mBloodBar;
-    private String newsDetailString = "";
+    private String targetConvId;
     private TextView mNewsDetail;
     private TextView mSupportLine;
     private TextView mOpposeLine;
+    private TextView mInstaComment;
+    private TextView mHotComment;
     //判断是否隐藏新闻详细信息
     private boolean hideText = true;
     private OnClickListener mTitleClick = new OnClickListener() {
@@ -132,12 +146,12 @@ public class NewsShow extends Activity {
                     obj = avObjects.get(0);
                     mNewsTitle.setText(obj.getString("Title"));
                     double support = obj.getDouble("SupportRatio");
-                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
-                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT);
-                    lp1.weight = (float)support;
+                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp1.weight = (float) support;
                     mSupportLine.setLayoutParams(lp1);
                     mSupportLine.setText(obj.getString("AffirmativeView"));
-                    lp2.weight = (float)(1-support);
+                    lp2.weight = (float) (1 - support);
                     mOpposeLine.setLayoutParams(lp2);
                     mOpposeLine.setText(obj.getString("OpposeView"));
  /*                   new Thread(new Runnable() {
@@ -164,7 +178,8 @@ public class NewsShow extends Activity {
                             }, null));
                         }
                     }).start();
- */                 new myAsyncTask().execute();
+ */
+                    new myAsyncTask().execute();
 
                 } else {
                     Log.d("失败", "查询错误: " + e.getMessage());
@@ -195,13 +210,54 @@ public class NewsShow extends Activity {
         mNewsTitle.setOnClickListener(mTitleClick);
         mBloodBar.setOnClickListener(mTitleClick);
         loginChat();
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewsShow.this);
+                builder.setMessage("赞 or 踩");
+                builder.setTitle("你的态度");
+                builder.setPositiveButton("赞", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //message的commentId，找comment，找用户
+                        String commentId = mCommentIds.get(position);
+                        supportComment(commentId);
+                    }
+                });
+                builder.setNegativeButton("踩", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String commentId = mCommentIds.get(position);
+                        dislikeComment(commentId);
+                    }
+                });
+                builder.create().show();
+            }
+        });
+        mInstaComment.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        mHotComment.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
         mRightSend = (Button)findViewById(R.id.btn_send_right);
         mEditText = (EditText)findViewById(R.id.et_sendmessage);
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
-        mBack = (Button)findViewById((R.id.news_show_back));
+        mBack = (ImageButton)findViewById((R.id.news_show_back));
+
+        mInstaComment = (TextView) findViewById(R.id.news_show_instant_comment);
+        mHotComment = (TextView) findViewById(R.id.news_show_hot_comment);
 
         mShowTitle = (ImageView)findViewById(R.id.et_news_title);
         mNewsTitle = (TextView)findViewById(R.id.news_show_title);
@@ -269,6 +325,7 @@ public class NewsShow extends Activity {
                 if (null != e) {
                     // 出错了，可能是网络问题无法连接 LeanCloud 云端，请检查网络之后重试。
                     // 此时聊天服务不可用。
+                    Log.d("iniChat", "error!!");
                     e.printStackTrace();
                 } else {
                     // 成功登录，可以开始进行聊天了（假设为 MainActivity）。
@@ -287,6 +344,8 @@ public class NewsShow extends Activity {
             // 新消息到来了。在这里增加你自己的处理代码。
             Map<String, Object> attr = ((AVIMTextMessage)message).getAttrs();
             Boolean attitude = (Boolean) attr.get("attitude");
+            String commentId = (String) attr.get("commentId");
+            mCommentIds.add(commentId);
             String comment = message.getContent();
             ChatMsgEntity entity = new ChatMsgEntity();
             if (attitude.equals(Boolean.TRUE)) {
@@ -337,6 +396,7 @@ public class NewsShow extends Activity {
                         //Log.d("after find Convs", "  newConvID=" + newsConvId + "conv:"+avObject1);int size = conversations.size();
                         AVIMConversation avimConversation = conversations.get(0);
                         String convId = avimConversation.getConversationId();
+                        targetConvId = convId;
                         Log.d("after find Convs", "convID=" + convId + "  newConvID=" + newsConvId);
                         if (convId.equals(newsConvId)) {
                             //find the conversation
@@ -375,10 +435,15 @@ public class NewsShow extends Activity {
                     return;
                 } else {
                     int size = list.size();
+                    Log.d("initData", "messagelist.size = " + size);
                     for (int i = 0; i < size; i++) {
                         AVIMTextMessage avimTextMessage = (AVIMTextMessage) list.get(i);
                         Map<String, Object> attr = avimTextMessage.getAttrs();
                         Boolean attitude = (Boolean) attr.get("attitude");
+                        String commentId = (String) attr.get("commentId");
+                        if (commentId == null) commentId = "...";
+                        Log.d("initData", "commentId = " + commentId+"size = "+size);
+                        mCommentIds.add(commentId);
                         String comment = avimTextMessage.getContent();
                         try {
                             JSONObject jsonObject = new JSONObject(avimTextMessage.getContent());
@@ -406,6 +471,20 @@ public class NewsShow extends Activity {
             }
         });
 
+    }
+
+    private void initHostComments() {
+        AVQuery<AVObject> query = new AVQuery<>("Comments");
+        //AVObject news = new AVObject("News");
+        //String title,content;
+        query.whereEqualTo("objectId", targetConvId);
+        Log.d("赞", "开始,commentId = " + targetConvId);
+        query.findInBackground(new FindCallback<AVObject>() {
+            @Override
+            public void done(List<AVObject> list, AVException e) {
+
+            }
+        });
     }
     private void leftSend() {
         String contString = mEditText.getText().toString();
@@ -476,5 +555,54 @@ public class NewsShow extends Activity {
         sbBuffer.append(year + "-" + month + "-" + day + " " + hour + ":" + mins);
         return sbBuffer.toString();
     }
+    private void supportComment(String commentId) {
+        AVQuery<AVObject> query = new AVQuery<>("Comments");
+        //AVObject news = new AVObject("News");
+        //String title,content;
 
+        query.whereEqualTo("objectId", commentId);
+        Log.d("赞", "开始,commentId = " + commentId);
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的评论");
+                    int size = avObjects.size();
+                    if (size == 0) {
+                        return;
+                    }
+                    avObjects.get(0).increment("Like");
+                    avObjects.get(0).increment("heat");
+                    avObjects.get(0).saveInBackground();
+                    Log.d("成功", "增加赞");
+                } else {
+                    Log.d("失败", "查询错误: " + e.getMessage());
+                }
+            }
+        });
+    }
+    private void dislikeComment(String commentId) {
+        AVQuery<AVObject> query = new AVQuery<>("Comments");
+        //AVObject news = new AVObject("News");
+        //String title,content;
+
+        query.whereEqualTo("objectId", commentId);
+        Log.d("赞", "开始,commentId = " + commentId);
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    Log.d("成功", "查询到" + avObjects.size() + " 条符合条件的评论");
+                    int size = avObjects.size();
+                    if (size == 0) {
+                        return;
+                    }
+                    avObjects.get(0).increment("Dislike");
+                    avObjects.get(0).increment("heat");
+                    avObjects.get(0).saveInBackground();
+                    Log.d("成功", "增加赞");
+                } else {
+                    Log.d("失败", "查询错误: " + e.getMessage());
+                }
+            }
+        });
+    }
 }
