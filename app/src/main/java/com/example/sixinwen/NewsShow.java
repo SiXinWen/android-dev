@@ -117,7 +117,6 @@ public class NewsShow extends Activity {
     private AVIMClient mImClient;
     private AVIMClientCallback avimClientCallback;
 
-
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
