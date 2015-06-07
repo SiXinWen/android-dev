@@ -122,7 +122,8 @@ public class MyApplication extends Application {
                     AVObject obj= newslist.get(i);
                     //newslist.add(obj);
                     //Log.d("WRHH", "bundle put " + obj.get("objectId").getClass());
-                    double support = obj.getDouble("SupportRatio");
+                    double support = obj.getDouble("SupportNum");
+                    double refute = obj.getDouble("RefuteNum");
                     //AVObject avFile = obj.getAVObject("Picture");
                     //avFile.getDataInBackground(datacallback);
                     Drawable drawable = null;
@@ -141,7 +142,7 @@ public class MyApplication extends Application {
                     NewsItem newsItem = new NewsItem(obj.getString("Title"),
                             obj.getString("Content"),
                             support,
-                            1-support,
+                            refute,
                             iw,
                             obj.getInt("CommentNum"));
                     newsItemList.add(newsItem);
