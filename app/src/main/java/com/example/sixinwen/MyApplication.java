@@ -117,7 +117,6 @@ public class MyApplication extends Application {
             @Override
             public void run() {
                 int size = newslist.size();
-
                 for (int i = 0; i < size; i++) {
                     AVObject obj= newslist.get(i);
                     //newslist.add(obj);
