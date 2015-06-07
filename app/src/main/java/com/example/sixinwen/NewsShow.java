@@ -64,6 +64,7 @@ import static android.view.View.OnClickListener;
  * Created by wangrunhui on 3/26/15.
  */
 public class NewsShow extends Activity {
+
     private Button mLeftSend;
     private Button mRightSend;
     private ImageButton mBack;
