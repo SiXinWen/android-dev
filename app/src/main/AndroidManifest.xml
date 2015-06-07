@@ -45,6 +45,11 @@
             android:windowSoftInputMode="adjustUnspecified">
 
             </activity>
+        <activity android:name=".Register"
+            android:label="NewsShow"
+            android:windowSoftInputMode="adjustUnspecified">
+
+            </activity>
 
     </application>
 

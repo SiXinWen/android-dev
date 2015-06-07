@@ -10,13 +10,14 @@ import android.widget.TableRow;
 
 import com.example.sixinwen.R;
 import com.example.sixinwen.AboutUs;
+import com.example.sixinwen.Register;
 
 /**
  * Created by kakarotto on 3/18/15.
  */
 public class FirstPageMe extends Fragment {
     private TableRow mMeAboutUs = null;
-
+    private TableRow mUser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,6 +35,14 @@ public class FirstPageMe extends Fragment {
     void init() {
         mMeAboutUs = (TableRow) getActivity().findViewById(R.id.me_about_us);
         mMeAboutUs.setOnClickListener(MeAboutUsListener);
+        mUser = (TableRow) getActivity().findViewById(R.id.more_page_row0);
+        mUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Register.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private View.OnClickListener MeAboutUsListener = new View.OnClickListener() {

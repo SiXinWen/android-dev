@@ -247,6 +247,7 @@ public class NewsShow extends Activity {
 
             }
         });
+        //initHostComments();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
@@ -384,7 +385,7 @@ public class NewsShow extends Activity {
         conversationQuery.findInBackground(new AVIMConversationQueryCallback(){
             @Override
             public void done(List<AVIMConversation> conversations, AVException e) {
-                Log.d("find done","");
+                Log.d("find done","\n");
                 if (null != e) {
                     // 出错了。。。
                     e.printStackTrace();
@@ -396,6 +397,7 @@ public class NewsShow extends Activity {
                         AVIMConversation avimConversation = conversations.get(0);
                         String convId = avimConversation.getConversationId();
                         targetConvId = convId;
+
                         Log.d("after find Convs", "convID=" + convId + "  newConvID=" + newsConvId);
                         if (convId.equals(newsConvId)) {
                             //find the conversation
@@ -469,18 +471,19 @@ public class NewsShow extends Activity {
                 mListView.setSelection(mDataArrays.size() - 1);
             }
         });
-
+        initHostComments();
     }
 
     private void initHostComments() {
         AVQuery<AVObject> query = new AVQuery<>("Comments");
         //AVObject news = new AVObject("News");
         //String title,content;
-        query.whereEqualTo("objectId", targetConvId);
-        Log.d("赞", "开始,commentId = " + targetConvId);
+        query.whereEqualTo("TargetConv", targetConvId);
+        Log.d("hot comments", "开始,targetConvId = " + targetConvId);
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
+                Log.d("hot comments", "size = " + list.size());
 
             }
         });
