@@ -200,7 +200,7 @@
                     android:layout_centerVertical="true"
                     android:background="#FF5AA5F8"
                     android:textColor="#ffffff"
-                    android:text="顶" />
+                    android:text="撕" />
                 <EditText
                     android:inputType="textMultiLine"
                     android:scrollHorizontally="false"
@@ -223,7 +223,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="#FFF75153"
                     android:textColor="#ffffff"
-                    android:text="踩" />
+                    android:text="撕" />
             </LinearLayout>
         </LinearLayout>
 

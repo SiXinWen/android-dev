@@ -595,7 +595,7 @@ public class NewsShow extends Activity {
             mListView.setSelection(mDataArrays.size() - 1);
             AVIMTextMessage avimTextMessage = new AVIMTextMessage();
             Map<String, Object> attr = new Hashtable<>();
-            attr.put("attitude", Boolean.TRUE);
+            attr.put("attitude", Boolean.FALSE);
             avimTextMessage.setText(contString);
             avimTextMessage.setAttrs(attr);
             mAvimConversation.sendMessage(avimTextMessage, new AVIMConversationCallback() {
@@ -623,7 +623,7 @@ public class NewsShow extends Activity {
             mListView.setSelection(mDataArrays.size()-1);
             AVIMTextMessage avimTextMessage = new AVIMTextMessage();
             Map<String, Object> attr = new Hashtable<>();
-            attr.put("attitude", Boolean.FALSE);
+            attr.put("attitude", Boolean.TRUE);
             avimTextMessage.setText(contString);
             avimTextMessage.setAttrs(attr);
             mAvimConversation.sendMessage(avimTextMessage, new AVIMConversationCallback() {
