@@ -167,6 +167,19 @@
                 android:dividerHeight="5dp"
                 android:scrollbars="none"
                 android:cacheColorHint="#00000000"/>
+            <ListView
+                android:visibility="gone"
+                android:id="@+id/chat_msg_hotlistview"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginTop="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:divider="@null"
+                android:dividerHeight="5dp"
+                android:scrollbars="none"
+                android:cacheColorHint="#00000000"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

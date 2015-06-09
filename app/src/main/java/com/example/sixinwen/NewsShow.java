@@ -69,10 +69,13 @@ public class NewsShow extends Activity {
     private ImageButton mBack;
     private EditText mEditText;
     private ChatMsgViewAdapter mChatMsgViewAdapter;
+    private ChatMsgViewAdapter mHotChatMsgViewAdapter;
     private ListView mListView;
+    private ListView mHotListView;
     private List<ChatMsgEntity> mDataArrays = new ArrayList<>();
     private List<ChatMsgEntity> mHotArrays = new ArrayList<>();
     private List<String> mCommentIds = new ArrayList<>();
+    private List<String> mHotCommentIds = new ArrayList<>();
     private AVObject news;
     private String indexOfNews;
     private AVObject obj;
@@ -86,6 +89,7 @@ public class NewsShow extends Activity {
     private TextView mOpposeLine;
     private TextView mInstaComment;
     private TextView mHotComment;
+    private LinearLayout input;
     //判断是否隐藏新闻详细信息
     private boolean hideText = true;
     private OnClickListener mTitleClick = new OnClickListener() {
@@ -118,6 +122,7 @@ public class NewsShow extends Activity {
         setContentView(R.layout.news_show);
         //AVOSCloud.setDebugLogEnabled(true);
         mChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mDataArrays);
+        mHotChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mHotArrays);
         initView();
         mLeftSend.setClickable(false);
         mRightSend.setClickable(false);
@@ -232,25 +237,57 @@ public class NewsShow extends Activity {
                 builder.create().show();
             }
         });
+        mHotListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewsShow.this);
+                builder.setMessage("赞 or 踩");
+                builder.setTitle("你的态度");
+                builder.setPositiveButton("赞", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        //message的commentId，找comment，找用户
+                        String commentId = mHotCommentIds.get(position);
+                        supportComment(commentId);
+                    }
+                });
+                builder.setNegativeButton("踩", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String commentId = mHotCommentIds.get(position);
+                        dislikeComment(commentId);
+                    }
+                });
+                builder.create().show();
+            }
+        });
         mInstaComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                mListView.setVisibility(View.VISIBLE);
+                mHotListView.setVisibility(View.GONE);
+                input.setVisibility(View.VISIBLE);
 
             }
         });
         mHotComment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mListView.setVisibility(View.GONE);
+                mHotListView.setVisibility(View.VISIBLE);
+                input.setVisibility(View.GONE);
             }
         });
-        //initHostComments();
+        //initHotComments();
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
         mRightSend = (Button)findViewById(R.id.btn_send_right);
         mEditText = (EditText)findViewById(R.id.et_sendmessage);
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
+        mHotListView = (ListView)findViewById(R.id.chat_msg_hotlistview);
         mBack = (ImageButton)findViewById((R.id.news_show_back));
 
         mInstaComment = (TextView) findViewById(R.id.news_show_instant_comment);
@@ -263,7 +300,7 @@ public class NewsShow extends Activity {
         mNewsDetail.setMovementMethod(ScrollingMovementMethod.getInstance());
         mSupportLine = (TextView) findViewById(R.id.news_show_support);
         mOpposeLine = (TextView) findViewById(R.id.news_show_oppose);
-
+        input = (LinearLayout) findViewById(R.id.rl_bottom);
     }
         public boolean onKeyDown(int keyCode, KeyEvent event) {
         mImClient.close(avimClientCallback);
@@ -440,7 +477,7 @@ public class NewsShow extends Activity {
                         Boolean attitude = (Boolean) attr.get("attitude");
                         String commentId = (String) attr.get("commentId");
                         if (commentId == null) commentId = "...";
-                        Log.d("initData", "commentId = " + commentId+"size = "+size);
+                        //Log.d("initData", "commentId = " + commentId+"size = "+size);
                         mCommentIds.add(commentId);
                         String comment = avimTextMessage.getContent();
                         try {
@@ -465,13 +502,16 @@ public class NewsShow extends Activity {
                     }
                 }
                 mListView.setAdapter(mChatMsgViewAdapter);
+
                 mListView.setSelection(mDataArrays.size() - 1);
+
+
             }
         });
-        initHostComments();
+        initHotComments();
     }
 
-    private void initHostComments() {
+    private void initHotComments() {
         AVQuery<AVObject> query = new AVQuery<>("Comments");
         //AVObject news = new AVObject("News");
         //String title,content;
@@ -480,8 +520,46 @@ public class NewsShow extends Activity {
         query.findInBackground(new FindCallback<AVObject>() {
             @Override
             public void done(List<AVObject> list, AVException e) {
-                Log.d("hot comments", "size = " + list.size());
 
+                if (list == null) {
+                    return;
+                } else {
+                    Log.d("hot comments", "size = " + list.size());
+                    int size = list.size();
+                    //Log.d("initHotComment", "list.size = " + size);
+                    for (int i = 0; i < size; i++) {
+                        AVObject hotComment = list.get(i);
+                        //Map<String, Object> attr = hotComment.getAttrs();
+                        Boolean attitude = (Boolean) hotComment.get("Attitude");
+                        String commentId = hotComment.getObjectId();
+                        if (commentId == null) commentId = "...";
+                        mHotCommentIds.add(commentId);
+                        Log.d("hotData1", "commentId = " + commentId + "size = " + size);
+                        String comment = hotComment.getString("Content");
+                        int like = hotComment.getInt("Like");
+                        int dislike = hotComment.getInt("Dislike");
+
+                        ChatMsgEntity entity = new ChatMsgEntity();
+
+                        if (attitude.equals(Boolean.TRUE)) {
+                            entity.setDate("" + hotComment.getString("createdAt"));
+                            entity.setName("支持方");Log.d("hotData2", "commentId = " + commentId + "size = " + size);
+                            entity.setText(comment);
+                            entity.setMsgType(true);
+
+                        } else {
+                            entity.setDate("" + hotComment.getString("createdAt"));
+                            entity.setName("反对方");Log.d("hotData2", "commentId = " + commentId + "size = " + size);
+                            entity.setText(comment);
+                            entity.setMsgType(false);
+                        }
+                        Log.d("hot", "hotarrays.size = " + mHotArrays.size());
+                        mHotArrays.add(entity);
+                    }
+                }
+
+                mHotListView.setAdapter(mHotChatMsgViewAdapter);
+                mHotListView.setSelection(mHotArrays.size() - 1);
             }
         });
     }
