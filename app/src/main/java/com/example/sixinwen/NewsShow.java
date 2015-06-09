@@ -512,7 +512,7 @@ public class NewsShow extends Activity {
     }
 
     private void initHotComments() {
-        AVQuery<AVObject> query = new AVQuery<>("Comments");
+        AVQuery<AVObject> query = new AVQuery<>("HotComments");
         //AVObject news = new AVObject("News");
         //String title,content;
         query.whereEqualTo("TargetConv", targetConvId);
@@ -529,32 +529,47 @@ public class NewsShow extends Activity {
                     //Log.d("initHotComment", "list.size = " + size);
                     for (int i = 0; i < size; i++) {
                         AVObject hotComment = list.get(i);
-                        //Map<String, Object> attr = hotComment.getAttrs();
-                        Boolean attitude = (Boolean) hotComment.get("Attitude");
-                        String commentId = hotComment.getObjectId();
-                        if (commentId == null) commentId = "...";
-                        mHotCommentIds.add(commentId);
-                        Log.d("hotData1", "commentId = " + commentId + "size = " + size);
-                        String comment = hotComment.getString("Content");
-                        int like = hotComment.getInt("Like");
-                        int dislike = hotComment.getInt("Dislike");
+                        final String commentString = hotComment.getString("Comments");
+                        Log.d("hot commetnId",commentString);
+                        AVQuery<AVObject> query1 = new AVQuery<>("Comments");
+                        query1.whereEqualTo("objectId", commentString);
+                        query1.findInBackground(new FindCallback<AVObject>() {
+                            @Override
+                            public void done(List<AVObject> list, AVException e) {
+                                Log.d("hot comment query", "" + list.size());
+                                if (list == null) {
+                                    return;
+                                } else {
+                                    AVObject comment = list.get(0);
+                                    String commentId = comment.getObjectId();
+                                    if (commentId == null) commentId = "...";
+                                    mHotCommentIds.add(commentId);
+                                    Log.d("hotData1", "commentId = " + commentId + "size = " + list.size());
+                                    String content = comment.getString("Content");
+                                    int like = comment.getInt("Like");
+                                    int dislike = comment.getInt("Dislike");
 
-                        ChatMsgEntity entity = new ChatMsgEntity();
+                                    Boolean attitude = (Boolean) comment.get("Attitude");
+                                    ChatMsgEntity entity = new ChatMsgEntity();
 
-                        if (attitude.equals(Boolean.TRUE)) {
-                            entity.setDate("" + hotComment.getString("createdAt"));
-                            entity.setName("支持方");Log.d("hotData2", "commentId = " + commentId + "size = " + size);
-                            entity.setText(comment);
-                            entity.setMsgType(true);
+                                    if (attitude.equals(Boolean.TRUE)) {
+                                        entity.setDate("" + comment.getString("createdAt"));
+                                        entity.setName("支持方");
+                                        entity.setText(content);
+                                        entity.setMsgType(true);
 
-                        } else {
-                            entity.setDate("" + hotComment.getString("createdAt"));
-                            entity.setName("反对方");Log.d("hotData2", "commentId = " + commentId + "size = " + size);
-                            entity.setText(comment);
-                            entity.setMsgType(false);
-                        }
-                        Log.d("hot", "hotarrays.size = " + mHotArrays.size());
-                        mHotArrays.add(entity);
+                                    } else {
+                                        entity.setDate("" + comment.getString("createdAt"));
+                                        entity.setName("反对方");
+                                        entity.setText(content);
+                                        entity.setMsgType(false);
+                                    }
+                                    Log.d("hot", "hotarrays.size = " + mHotArrays.size());
+                                    mHotArrays.add(entity);
+                                }
+                            }
+                        });
+
                     }
                 }
 
