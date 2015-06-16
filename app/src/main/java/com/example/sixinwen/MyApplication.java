@@ -36,6 +36,7 @@ public class MyApplication extends Application {
     private static FirstPageNewsAdapter mAdapter;
     private static Runnable updateNewsRunnable;
     private static Handler mHandler;
+    private static String username = "撕粉001";
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
@@ -51,6 +52,14 @@ public class MyApplication extends Application {
 
     public static Handler getmHandler() {
         return mHandler;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void setUsername(String username) {
+        MyApplication.username = username;
     }
 
     public void onCreate(){

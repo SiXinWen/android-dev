@@ -53,6 +53,7 @@ public class Login extends Activity {
                         if (user != null) {
                             // 登录成功
                             Log.d("Login", "succeed!");
+                            MyApplication.setUsername(name.getText().toString());
                             finish();
                         } else {
                             // 登录失败

@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.sixinwen.Login;
+import com.example.sixinwen.MyApplication;
 import com.example.sixinwen.R;
 import com.example.sixinwen.AboutUs;
 import com.example.sixinwen.Register;
@@ -19,6 +21,7 @@ import com.example.sixinwen.Register;
 public class FirstPageMe extends Fragment {
     private TableRow mMeAboutUs = null;
     private TableRow mUser;
+    private TextView name;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class FirstPageMe extends Fragment {
                 startActivity(intent);
             }
         });
+        name = (TextView) getActivity().findViewById(R.id.name);
+        name.setText(MyApplication.getUsername());
     }
 
     private View.OnClickListener MeAboutUsListener = new View.OnClickListener() {
