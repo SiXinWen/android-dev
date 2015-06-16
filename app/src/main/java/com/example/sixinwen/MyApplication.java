@@ -7,12 +7,14 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.FunctionCallback;
 import com.avos.avoscloud.PushService;
 import com.avos.avoscloud.SaveCallback;
 import com.example.sixinwen.adapter.FirstPageNewsAdapter;
@@ -21,7 +23,9 @@ import com.example.sixinwen.utils.NewsItem;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ${Fastrun} on ${3/18/15}.
@@ -84,6 +88,7 @@ public class MyApplication extends Application {
             }
         };
         queryNews();
+        signUp();
     }
 
     private void queryNews() {
@@ -112,6 +117,21 @@ public class MyApplication extends Application {
         });
     }
 
+    private void signUp() {
+        //! ! ! ! ! ! register test
+        Map<String,Object> parameters = new Hashtable<>();
+        parameters.put("InsID","Wangrunhui");
+
+        AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
+            public void done(Object object, AVException e) {
+                if (e == null) {
+                    Log.d("sign up", "secceed!" + object.toString());
+                } else {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
     private void init() {
         updateNewsRunnable = new Runnable() {
             @Override

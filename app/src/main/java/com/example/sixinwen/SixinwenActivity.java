@@ -54,19 +54,7 @@ public class SixinwenActivity extends Activity implements View.OnClickListener{
         initViews();
         mFragmentManager = getFragmentManager();
         setTabSelection(0);
-        //! ! ! ! ! ! register test
-        Map<String,Object> parameters = new Hashtable<>();
-        parameters.put("InsID","Wangrunhui");
 
-        AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
-            public void done(Object object, AVException e) {
-                if (e == null) {
-                    Log.d("sign up", "secceed!" + object.toString());
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 

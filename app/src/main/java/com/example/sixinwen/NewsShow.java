@@ -120,7 +120,7 @@ public class NewsShow extends Activity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.news_show);
-        //AVOSCloud.setDebugLogEnabled(true);
+        AVOSCloud.setDebugLogEnabled(true);
         mChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mDataArrays);
         mHotChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mHotArrays);
         initView();
@@ -136,57 +136,8 @@ public class NewsShow extends Activity {
         Bundle bundle = getIntent().getExtras();
         indexOfNews = bundle.getString("NewsIndex");
         //AVAnalytics.trackAppOpened(getIntent());
-        AVQuery<AVObject> query = new AVQuery<>("News");
-        query.whereEqualTo("objectId", indexOfNews);
-        query.findInBackground(new FindCallback<AVObject>() {
-            public void done(List<AVObject> avObjects, AVException e) {
-                if (e == null) {
-                    //Log.d("newsShow成功", "查询到" + avObjects.size() + " 条符合条件的数据");
-                    obj = avObjects.get(0);
-                    mNewsTitle.setText(obj.getString("Title"));
+        queryConversation();
 
-                    double support = obj.getDouble("SupportNum");
-                    double refute = obj.getDouble("RefuteNum");
-                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
-                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
-                    lp1.weight = (float) support;
-                    mSupportLine.setLayoutParams(lp1);
-                    mSupportLine.setText(obj.getString("AffirmativeView"));
-                    lp2.weight = (float) refute;
-                    mOpposeLine.setLayoutParams(lp2);
-                    mOpposeLine.setText(obj.getString("OpposeView"));
- /*                   new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mNewsDetail.setText(Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
-                                @Override
-                                public Drawable getDrawable(String source) {
-                                    Drawable drawable;
-                                    URL url;
-                                    try {
-                                        url = new URL(source);//Log.d("打开URL成功", ""+url.openStream());
-                                        InputStream is = url.openStream();
-                                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
-                                    } catch (Exception e) {
-                                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
-                                        return null;
-                                    }
-                                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
-                                            .getIntrinsicHeight());
-
-                                    return drawable;
-                                }
-                            }, null));
-                        }
-                    }).start();
- */
-                    new myAsyncTask().execute();
-
-                } else {
-                    Log.d("失败", "查询错误: " + e.getMessage());
-                }
-            }
-        });
         mBack.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,6 +232,60 @@ public class NewsShow extends Activity {
             }
         });
         //initHotComments();
+    }
+
+    private void queryConversation() {
+        AVQuery<AVObject> query = new AVQuery<>("News");
+        query.whereEqualTo("objectId", indexOfNews);
+        query.findInBackground(new FindCallback<AVObject>() {
+            public void done(List<AVObject> avObjects, AVException e) {
+                if (e == null) {
+                    //Log.d("newsShow成功", "查询到" + avObjects.size() + " 条符合条件的数据");
+                    obj = avObjects.get(0);
+                    mNewsTitle.setText(obj.getString("Title"));
+
+                    double support = obj.getDouble("SupportNum");
+                    double refute = obj.getDouble("RefuteNum");
+                    LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+                    lp1.weight = (float) support;
+                    mSupportLine.setLayoutParams(lp1);
+                    mSupportLine.setText(obj.getString("AffirmativeView"));
+                    lp2.weight = (float) refute;
+                    mOpposeLine.setLayoutParams(lp2);
+                    mOpposeLine.setText(obj.getString("OpposeView"));
+ /*                   new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mNewsDetail.setText(Html.fromHtml(obj.getString("htmlContent"), new Html.ImageGetter() {
+                                @Override
+                                public Drawable getDrawable(String source) {
+                                    Drawable drawable;
+                                    URL url;
+                                    try {
+                                        url = new URL(source);//Log.d("打开URL成功", ""+url.openStream());
+                                        InputStream is = url.openStream();
+                                        drawable = Drawable.createFromStream(is, "");  //获取网路图片
+                                    } catch (Exception e) {
+                                        Log.d("获取网络图片失败", "获取网络图片查询错误: " + e.getMessage());
+                                        return null;
+                                    }
+                                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable
+                                            .getIntrinsicHeight());
+
+                                    return drawable;
+                                }
+                            }, null));
+                        }
+                    }).start();
+ */
+                    new myAsyncTask().execute();// get news content (images) from leancloud
+
+                } else {
+                    Log.d("失败", "查询错误: " + e.getMessage());
+                }
+            }
+        });
     }
     private void initView() {
         mLeftSend = (Button)findViewById(R.id.btn_send_left);
@@ -380,7 +385,9 @@ public class NewsShow extends Activity {
             Boolean attitude = (Boolean) attr.get("attitude");
             String commentId = (String) attr.get("commentId");
             mCommentIds.add(commentId);
-            String comment = message.getContent();
+
+            String comment = ((AVIMTextMessage) message).getText();
+            Log.d("onMessage", comment);
             ChatMsgEntity entity = new ChatMsgEntity();
             if (attitude.equals(Boolean.TRUE)) {
                 entity.setDate("" + message.getTimestamp());
@@ -395,6 +402,7 @@ public class NewsShow extends Activity {
             }
             mDataArrays.add(entity);
             mChatMsgViewAdapter.notifyDataSetChanged();
+            mListView.setSelection(mDataArrays.size() - 1);
             String msgContent = message.getContent();
             Log.d("onMessage",conversation.getConversationId() + " 收到一条新消息：" + msgContent);
         }
@@ -422,6 +430,8 @@ public class NewsShow extends Activity {
                 Log.d("find done","\n");
                 if (null != e) {
                     // 出错了。。。
+                    Log.d("conversation error", e.getMessage());
+
                     e.printStackTrace();
                 } else {
                     if (null != conversations) {
@@ -463,12 +473,13 @@ public class NewsShow extends Activity {
             @Override
             public void done(List<AVIMMessage> list, AVException e) {
                 Log.d("get history", "find messagae list");
-                mRightSend.setClickable(true);
-                mLeftSend.setClickable(true);
+
                 Toast.makeText(NewsShow.this, "可以进行评论啦！", Toast.LENGTH_SHORT);
                 if (list == null) {
                     return;
                 } else {
+                    mRightSend.setClickable(true);
+                    mLeftSend.setClickable(true);
                     int size = list.size();
                     Log.d("initData", "messagelist.size = " + size);
                     for (int i = 0; i < size; i++) {
