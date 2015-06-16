@@ -48,6 +48,7 @@ import com.example.sixinwen.utils.ChatMsgEntity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -90,6 +91,10 @@ public class NewsShow extends Activity {
     private TextView mInstaComment;
     private TextView mHotComment;
     private LinearLayout input;
+    private LinearLayout mClickBox;
+    private TextView mSupport;
+    private TextView mDefute;
+    private int mClickPosition;
     //判断是否隐藏新闻详细信息
     private boolean hideText = true;
     private OnClickListener mTitleClick = new OnClickListener() {
@@ -165,6 +170,8 @@ public class NewsShow extends Activity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                mClickBox.setVisibility(View.VISIBLE);
+                mClickPosition = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(NewsShow.this);
                 builder.setMessage("赞 or 踩");
                 builder.setTitle("你的态度");
@@ -185,12 +192,14 @@ public class NewsShow extends Activity {
                         dislikeComment(commentId);
                     }
                 });
-                builder.create().show();
+                //builder.create().show();
             }
         });
         mHotListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                mClickBox.setVisibility(View.VISIBLE);
+                mClickPosition = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(NewsShow.this);
                 builder.setMessage("赞 or 踩");
                 builder.setTitle("你的态度");
@@ -306,6 +315,27 @@ public class NewsShow extends Activity {
         mSupportLine = (TextView) findViewById(R.id.news_show_support);
         mOpposeLine = (TextView) findViewById(R.id.news_show_oppose);
         input = (LinearLayout) findViewById(R.id.rl_bottom);
+
+        mClickBox = (LinearLayout) findViewById(R.id.click_box);
+        mClickBox.setVisibility(View.GONE);
+        mSupport = (TextView) findViewById(R.id.support_click);
+        mSupport.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickBox.setVisibility(View.GONE);
+                String commentId = mCommentIds.get(mClickPosition);
+                supportComment(commentId);
+            }
+        });
+        mDefute = (TextView) findViewById(R.id.defute_click);
+        mDefute.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickBox.setVisibility(View.GONE);
+                String commentId = mCommentIds.get(mClickPosition);
+                dislikeComment(commentId);
+            }
+        });
     }
         public boolean onKeyDown(int keyCode, KeyEvent event) {
         mImClient.close(avimClientCallback);
