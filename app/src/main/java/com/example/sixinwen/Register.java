@@ -66,33 +66,34 @@ public class Register extends Activity {
 
                 Map<String,Object> parameters = new Hashtable<>();
                 parameters.put("InsID", username);
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(AVException e) {
+                        if (e == null) {
+                            // successfully
+                            Log.d("register", "successful");
+                            Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            // failed
+                            Log.d("register", "failed");
+                            Toast.makeText(getApplicationContext(), "注册失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
-                AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
+ /*               AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
                     public void done(Object object, AVException e) {
                         if (e == null) {
                             Log.d("sign up", "secceed!" + object.toString());
 
-                            user.signUpInBackground(new SignUpCallback() {
-                                public void done(AVException e) {
-                                    if (e == null) {
-                                        // successfully
-                                        Log.d("register", "successful");
-                                        Toast.makeText(Register.this, "注册成功", Toast.LENGTH_SHORT);
-                                        finish();
-                                    } else {
-                                        // failed
-                                        Log.d("register", "failed");
-                                        Toast.makeText(Register.this, "注册失败，请重新尝试", Toast.LENGTH_SHORT);
-                                    }
-                                }
-                            });
+
 
                         } else {
                             e.printStackTrace();
                         }
                     }
                 });
-
+*/
             }
         });
     }

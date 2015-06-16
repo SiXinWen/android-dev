@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 
@@ -28,6 +29,7 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.user_login);
+        AVOSCloud.setDebugLogEnabled(true);
         initViews();
     }
 
@@ -51,6 +53,7 @@ public class Login extends Activity {
                         if (user != null) {
                             // 登录成功
                             Log.d("Login", "succeed!");
+                            finish();
                         } else {
                             // 登录失败
                             Log.d("Login", "failed!");
