@@ -6,10 +6,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.avos.avoscloud.AVCloud;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FunctionCallback;
 import com.avos.avoscloud.SignUpCallback;
+
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by ${Fastrun} on ${3/18/15}.
@@ -36,24 +42,57 @@ public class Register extends Activity {
                 String email = mEmail.getText().toString();
                 String gender = mGender.getText().toString();
                 String phone = mPhone.getText().toString();
-                AVUser user = new AVUser();
+                final AVUser user = new AVUser();
                 user.setUsername(username);
                 user.setPassword(password);
                 user.setEmail(email);
                 user.put("phone", phone);
                 user.put("gender", gender);
-                user.put("NickName",nickname);
+                user.put("NickName", nickname);
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(AVException e) {
                         if (e == null) {
                             // successfully
                             Log.d("register", "successful");
+                            Toast.makeText(Register.this, "注册成功", Toast.LENGTH_SHORT);
+                            finish();
                         } else {
                             // failed
+                            Log.d("register", "failed");
+                            Toast.makeText(Register.this, "注册失败，请重新尝试", Toast.LENGTH_SHORT);
                         }
                     }
                 });
-                finish();
+
+                Map<String,Object> parameters = new Hashtable<>();
+                parameters.put("InsID", username);
+
+                AVCloud.callFunctionInBackground("InsSignUp", parameters, new FunctionCallback() {
+                    public void done(Object object, AVException e) {
+                        if (e == null) {
+                            Log.d("sign up", "secceed!" + object.toString());
+
+                            user.signUpInBackground(new SignUpCallback() {
+                                public void done(AVException e) {
+                                    if (e == null) {
+                                        // successfully
+                                        Log.d("register", "successful");
+                                        Toast.makeText(Register.this, "注册成功", Toast.LENGTH_SHORT);
+                                        finish();
+                                    } else {
+                                        // failed
+                                        Log.d("register", "failed");
+                                        Toast.makeText(Register.this, "注册失败，请重新尝试", Toast.LENGTH_SHORT);
+                                    }
+                                }
+                            });
+
+                        } else {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
         });
     }

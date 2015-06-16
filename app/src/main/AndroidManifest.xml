@@ -50,6 +50,11 @@
             android:windowSoftInputMode="adjustUnspecified">
 
             </activity>
+        <activity android:name=".Login"
+            android:label="NewsShow"
+            android:windowSoftInputMode="adjustUnspecified">
+
+            </activity>
 
     </application>
 

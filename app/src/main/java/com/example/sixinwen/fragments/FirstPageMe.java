@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableRow;
 
+import com.example.sixinwen.Login;
 import com.example.sixinwen.R;
 import com.example.sixinwen.AboutUs;
 import com.example.sixinwen.Register;
@@ -39,7 +40,7 @@ public class FirstPageMe extends Fragment {
         mUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Register.class);
+                Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);
             }
         });
