@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +47,12 @@ import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.example.sixinwen.adapter.ChatMsgViewAdapter;
 import com.example.sixinwen.utils.ChatMsgEntity;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.tauth.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +76,7 @@ public class NewsShow extends Activity {
     private Button mLeftSend;
     private Button mRightSend;
     private ImageButton mBack;
+    private Button mShare;
     private EditText mEditText;
     private ChatMsgViewAdapter mChatMsgViewAdapter;
     private ChatMsgViewAdapter mHotChatMsgViewAdapter;
@@ -126,6 +135,7 @@ public class NewsShow extends Activity {
         super.onCreate(savedInstance);
         setContentView(R.layout.news_show);
         AVOSCloud.setDebugLogEnabled(true);
+        initWechatShare();
         mChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mDataArrays);
         mHotChatMsgViewAdapter = new ChatMsgViewAdapter(NewsShow.this, mHotArrays);
         initView();
@@ -162,7 +172,8 @@ public class NewsShow extends Activity {
                 rightSend();
             }
         });
-
+        mLeftSend.setClickable(false);
+        mRightSend.setClickable(false);
         mShowTitle.setOnClickListener(mTitleClick);
         mNewsTitle.setOnClickListener(mTitleClick);
         mBloodBar.setOnClickListener(mTitleClick);
@@ -241,6 +252,12 @@ public class NewsShow extends Activity {
             }
         });
         //initHotComments();
+        mShare.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wechatShare(0);
+            }
+        });
     }
 
     private void queryConversation() {
@@ -303,6 +320,7 @@ public class NewsShow extends Activity {
         mListView = (ListView)findViewById(R.id.chat_msg_listview);
         mHotListView = (ListView)findViewById(R.id.chat_msg_hotlistview);
         mBack = (ImageButton)findViewById((R.id.news_show_back));
+        mShare = (Button)findViewById((R.id.news_show_share));
 
         mInstaComment = (TextView) findViewById(R.id.news_show_instant_comment);
         mHotComment = (TextView) findViewById(R.id.news_show_hot_comment);
@@ -738,4 +756,37 @@ public class NewsShow extends Activity {
             }
         });
     }
+
+    //wechat share code
+    private IWXAPI wxApi;
+//实例化
+    private void initWechatShare() {
+
+    wxApi = WXAPIFactory.createWXAPI(this, "wxe4aa47f0f98d1d04",true);
+    wxApi.registerApp("wxe4aa47f0f98d1d04");
+    }
+    /**
+     * 微信分享 （这里仅提供一个分享网页的示例，其它请参看官网示例代码）
+     * @param flag(0:分享到微信好友,1:分享到微信朋友圈)
+     */
+    private void wechatShare(int flag){
+        WXWebpageObject webpage = new WXWebpageObject();
+        webpage.webpageUrl = "http://sixinwen.avosapps.com/share?nid=5573e468e4b03c3d0281e5ae";
+        WXMediaMessage msg = new WXMediaMessage(webpage);
+        msg.title = "对于 复旦教授与崔永元就转基因展开激辩 我认为...";
+        msg.description = "日前，崔永元在复旦大学交流会上与教授就食品转基因问题展开辩论，教授一开场便不愿回答小崔的问题，直斥对方没资格跟自己讨论黄金大米的科学性。当问到黄金大米究竟转入了几个基因时，教授竟不知该如何回答...更多";
+        //这里替换一张自己工程里的图片资源
+        Bitmap thumb = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+        msg.setThumbImage(thumb);
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = flag==0?SendMessageToWX.Req.WXSceneSession:SendMessageToWX.Req.WXSceneTimeline;
+        wxApi.sendReq(req);
+    }
+    /**在需要分享的地方添加代码：
+        wechatShare(0);//分享到微信好友
+        wechatShare(1);//分享到微信朋友圈
+    */
 }

@@ -94,9 +94,10 @@
     <orderEntry type="library" exported="" name="qq.sdk.1.6.1" level="project" />
     <orderEntry type="library" exported="" name="android-async-http-1.4.6" level="project" />
     <orderEntry type="library" exported="" name="avoscloud-search-v3.2.2" level="project" />
+    <orderEntry type="library" exported="" name="libammsdk" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
-    <orderEntry type="library" exported="" name="avoscloud-sdk-v3.2.2" level="project" />
     <orderEntry type="library" exported="" name="weibo.sdk.android.sso.3.0.1-leancloud" level="project" />
+    <orderEntry type="library" exported="" name="avoscloud-sdk-v3.2.2" level="project" />
     <orderEntry type="library" exported="" name="avoscloud-statistics-v3.2.2" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.2.4" level="project" />
   </component>

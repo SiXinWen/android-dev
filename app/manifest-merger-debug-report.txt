@@ -110,6 +110,14 @@ ADDED from AndroidManifest.xml:48:9
 		ADDED from AndroidManifest.xml:49:13
 	android:name
 		ADDED from AndroidManifest.xml:48:19
+activity#com.example.sixinwen.Login
+ADDED from AndroidManifest.xml:53:9
+	android:windowSoftInputMode
+		ADDED from AndroidManifest.xml:55:13
+	android:label
+		ADDED from AndroidManifest.xml:54:13
+	android:name
+		ADDED from AndroidManifest.xml:53:19
 uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:support-v4:22.0.0:20:5

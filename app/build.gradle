@@ -35,6 +35,7 @@ dependencies {
             //avoscloud-statistics 为 LeanCloud 统计包
             compile 'cn.leancloud.android:avoscloud-statistics:3.1+@aar'*/
     //compile project(':leanchatlib')
+
     compile 'com.android.support:support-v4:22.0.0'
     //provided files('libs/avoscloud-sdk-v3.1.4.jar')
 }
